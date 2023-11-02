@@ -1,0 +1,54 @@
+baseURL: ""
+languageCode: en-US
+title: Chandler U
+theme: PaperMod
+homeInfoParams:
+    Title: "Hi there \U0001F44B"
+    Content: Welcome to my blog
+# profile-mode
+
+params:
+  profileMode:
+    enabled: true
+    title: "Hello!" # optional default will be site title
+    subtitle: "Welcome to my data science portfolio website. Please browse around to find out more about my background and check out some of my projects. I love all things data and I'm always excited to 
+    colaborate."
+    imageUrl: "screenshot.png" # optional
+    imageTitle: "blah" # optional
+    imageWidth: 200 # custom size
+    imageHeight: 200 # custom size
+    
+  socialIcons: # optional
+    - name: "github"
+      url: "https://github.com/ChandlerU11"
+    - name: "linkedin"
+      url: "https://www.linkedin.com/in/chandler-underwood-421bbb162/"
+    - name: "strava"
+      url: "https://www.strava.com/athletes/55427636"
+
+menu:
+  main:
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 10
+    - identifier: posts
+      name: Posts
+      url: /archives/
+      weight: 20 
+    - identifier: projects
+      name: Projects
+      url: /projects/
+      weight: 30      
+    - identifier: publications
+      name: Publications
+      url: /publications/
+      weight: 40 
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 50
+    - identifier: Tags
+      name: Tags
+      url: /tags/
+      weight: 60
