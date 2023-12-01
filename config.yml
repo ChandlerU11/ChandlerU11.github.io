@@ -11,8 +11,7 @@ params:
   profileMode:
     enabled: true
     title: "Hello!" # optional default will be site title
-    subtitle: "Welcome to my data science portfolio website. Please browse around to find out more about my background and check out some of my projects. I love all things data and I'm always excited to 
-    colaborate."
+    subtitle: "Welcome to my data science portfolio website. Please browse around to find out more about my background and check out some of my projects."
     imageUrl: "screenshot.png" # optional
     imageTitle: "blah" # optional
     imageWidth: 200 # custom size

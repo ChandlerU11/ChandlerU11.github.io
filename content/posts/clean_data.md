@@ -600,7 +600,8 @@ for data in data_list:
 
 Lasso regression is the best model for predicting the Average Heart Rate of my runs while Random Forest Regressor is the best at predicting the Max Heart Rate. 
 
-## Fit models and Visualize Performance
+## Fitting final models
+
 Let's fit the best performing models using their entire respective training sets and predict on the samples that are missing HR data.
 
 
