@@ -29,6 +29,7 @@ author = "Chandler"
 
 ## Boise State University
 Research Associate | August 2023 - Present
+
 Graduate Research Assistant | August 2022 – August 2023
 - Studied state-of-the-art developments in the field of Adversarial Machine Learning to establish a strong foundation for research.
 - Collected, cleaned, and preprocessed large datasets using Pandas and NLTK, ensuring data quality and integrity for model training and evaluation.
