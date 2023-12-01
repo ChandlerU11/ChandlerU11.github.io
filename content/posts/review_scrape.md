@@ -6,7 +6,7 @@ description = "Using the Python Requests and Beautiful Soup libraries, I constru
 +++
 
 # Motivation
-I do quite a bit of online shopping (who doesn't these days), and I oftentimes find myself pouring over the reviews for a product trying to decide if it's right for me. Many of these times I've found myself wishing that there was a succinct summary of all the reviews I could read to speed up this whole process. I've yet to see any online retailers doing exaclty what I'm looking for, so I figured I'd make it happen myself. For this quasi "proof-of-concept", I wanted to use data that was fun, interesting, and maybe even a little contraversial...after much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, Crocs. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset of reviews for Crocs Clogs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can build a review summarizer for the most loved and hated shoes on the planet! 
+I do quite a bit of online shopping (who doesn't these days), and I oftentimes find myself pouring over the reviews for a product trying to decide if it's right for me. Many of these times I've found myself wishing that there was a succinct summary of all the reviews I could read to speed up this whole process. I've yet to see any online retailers doing exaclty what I'm looking for, so I figured I'd make it happen myself. For this quasi "proof-of-concept", I wanted to use data that was fun, interesting, and maybe even a little contraversial...after much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, Crocs. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset containing reviews for Crocs Clogs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can train a review summarizer for the most loved and hated shoes on the planet! 
 
 # What tools can we use? 
 There are several Python libraries that are helpful for webscraping:
@@ -18,12 +18,12 @@ There are several Python libraries that are helpful for webscraping:
 In this project, I'll be using Requests, Beautiful Soup, and Pandas. Selenium isn't needed because we don't need to click anything to move through the review pages on Zappos.com as you'll see later.  
 
 # Getting Started
-Before we start scraping, we need to do some research, meaning that we need to go look around on the internet and assess potential sites for scraping. What sites would have a lot of product reviews for Crocs? The Crocs website itself, Amazon, and Zappos immediately come to mind. After folling some initial site evaluation steps outlined in *insert* link, I decided Zappos.com was the best place to scrape from. 
+Before we start scraping, we need to do some research, meaning that we need to go look around on the internet and assess potential sites for scraping. What sites would have a lot of product reviews for Crocs? The Crocs website itself, Amazon, and Zappos immediately come to mind. After following some initial site evaluation steps outlined in *insert* link, I decided Zappos.com was the best place to scrape from. 
 
-First, we need to figure out how to traverse the pages of reviews on Zappos.com. I went and clicked through the review pages and payed close attention to the URL. I noticed that it explicitly changes with each page. For example, https://www.zappos.com/product/review/7153812/page/1/orderBy/best takes you to the first page, and https://www.zappos.com/product/review/7153812/page/2/orderBy/best takes you to the second page. Easy peasy! To traverse the pages, all we need to do is change a single character in the URL. 
+First, we need to figure out how to traverse the pages of reviews on Zappos.com. I went and clicked through the review pages and payed close attention to the URL. I noticed that it explicitly changes with each page. For example, https://www.zappos.com/product/review/7153812/page/1/orderBy/best takes you to the first page, and https://www.zappos.com/product/review/7153812/page/2/orderBy/best takes you to the second page. Easy. To traverse the pages, all we need to do is change a single character in the URL. 
 
 # Some Code to Download Whole Webpages
-I prefer to download whole webpages and extract data from them later. Why? Because comapnies oftentimes aren't super happy about you scraping their data, and you have to be carefull about how your traffic looks as you surf pages. Manners are important! Extracting data from HTML is a messy process that requires some developement, and you don't want to risk having to rerun your scraper becuase you forgot to write the Beatiful Soup code to extract a product's rating, for example. A script to traverse and download Zappos review pages is below.
+I prefer to download whole webpages and extract data from them later. Why? Because comapnies oftentimes aren't super happy about you scraping their data, and you have to be carefull about how your traffic looks as you surf pages. Manners are important! Extracting data from HTML is a messy process that requires developement, and you don't want to risk having to rerun your scraper becuase you forgot to write the Beatiful Soup code to extract a product's rating, for example. A script to traverse and download Zappos review pages is below.
 
 ```python
 from bs4 import BeautifulSoup
@@ -62,10 +62,10 @@ for i in range(1, 1000):
 ```
 
 # Extracting Data from Webpages
-Now that we've downloaded the pages of reviews, we need to figure out how to extract the text from the HTML in useful format. Google Chrome's page inspect tool is very useful here as it allows us to click on items within the webpage and find their respective tagnames, which we'll need to extract the data. 
+Now that we've downloaded the pages of reviews, we need to figure out how to extract the text from the HTML in a useful format. Google Chrome's page inspect tool is great here as it allows us to click on items within the webpage and find their respective HTML tagnames. 
 ![Scenario 1: Across columns](/Zappos_Insp.PNG)
 
-As I clicked on the items I wanted to extract on the webpage, I took note of the tagnames associated with them. Beautiful Soup uses these tagnames to extract the text we need. Through some trial and error, I ended up with the following function to extract the text we need for our reviews dataset. 
+As I clicked on the items I wanted to extract on the webpage, I took note of the tagnames associated with them. Beautiful Soup uses these tagnames to extract the text we need. Through some trial and error, I ended up with the following function to extract the desired text to make the reviews dataset. 
 
 ```python 
 def cus_rev_zappos(soup, b = True):

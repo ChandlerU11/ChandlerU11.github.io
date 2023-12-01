@@ -434,11 +434,11 @@ Over half of the values in the *Avg HR*, *Max HR*, *Min Temp* and *Max Temp* col
 3. Bring in an outside data source.
 4. Create a predictive model. 
 
-Option 1 is not going to work here as that would eliminate half my data. Option 2 works OK for the columns that are missing only a few features, but it would definitely take away from the richness of the data and make for some boring / unhelpful visualizations if we used it for all the missing values in the dataset. But, option 3 can work great for filling in the tempurature data as it is easy to find weather data, and option 4 is the way to go for fixing the HR data!
+Option 1 is not going to work here as that would eliminate half my data. Option 2 works OK for the columns that are missing only a few features, but it would definitely take away from the richness of the data and make for some boring / unhelpful visualizations if we used it for all the missing values in the dataset. But, option 3 can work great for filling in the tempurature data as it is easy to find weather data, and option 4 is the way to go for fixing the HR data.
 
 
 ```python
-#Using Option 1 to infill missing data 
+#Using Option 2 to infill missing data 
 cols_with_few_nan = ['Total Ascent', 'Total Descent','Min Elevation', 'Max Elevation']
 df[cols_with_few_nan] = df[cols_with_few_nan].fillna(df[cols_with_few_nan].median())
 ```
@@ -471,7 +471,7 @@ sorted(run_locations.items(), key=lambda x:x[1], reverse = True)[:10]
 
 
 
-Despite differing titles, the the vast majority of these samples occur either in my old college town of Starkville, MS or very close to it, and nearly all the rest occur somewhere in Mississippi or in the South. Because we don't have a way to convert these titles to a more specific location without getting really messy, I believe it will suffice to use weather data for Starkville, MS as a proxy for all the missing values we have. 
+Despite differing titles, the vast majority of these samples occur either in my old college town of Starkville, MS or very close to it, and nearly all the rest occur somewhere in Mississippi or in the South. Because we don't have a way to convert these titles to a more specific location without getting really messy, I believe it will suffice to use weather data for Starkville, MS as a proxy for all the missing values we have. 
 
 
 ```python
@@ -890,4 +890,4 @@ df
 
 {{< /rawhtml >}}
 
-There you have it, a NULL-free clean dataset. We are dashboard ready now. Check out my next post to see what I can make with this in Tablaeu. 
+There you have it, a NULL-free, clean dataset. We are dashboard ready now. Check out my next post to see what I can make with this in Tablaeu. 
