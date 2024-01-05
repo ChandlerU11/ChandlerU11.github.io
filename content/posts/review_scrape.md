@@ -120,4 +120,4 @@ review_df = pd.DataFrame({'review': reviews, 'rating': ratings, 'date': date})
 review_df.to_csv("Zappos_Croc_Reviews_Total.csv")
 ```
 
-Soon after extracting from the webpages, I found that Zappos does not publish reviews after the 400th page :(. We got a decent amount of data, however! We ended up with over 11,500 distinct reviews for Crocs - definitely enough to get somewhere with fine-tuning. Here is some example output from the final dataset. 
+Soon after extracting from the webpages, I found that Zappos does not publish reviews after the 400th page :(. We got a decent amount of data, however! We ended up with over 11,500 distinct reviews for Crocs.

@@ -23,7 +23,8 @@ author = "Chandler"
   - Data Structures and Algorithms
   - Object-Oriented Programming
   - Statistal Inference and Probability
----
+
+
 ---
 # Experience
 
@@ -48,5 +49,4 @@ author = "Chandler"
 *IT Co-Op Associate* | June 2019 – December 2019
 - Collaborated with enterprise information systems team to assess and implement solutions for data driven business needs. 
 - Converted SQL queries for use with IBM Cognos to drive dashboards and daily reports.
-- Crafted backend SQL for intranet website to update, read, and delete enterprise codes used during
----
+- Crafted backend SQL for intranet website to update, read, and delete enterprise codes used during data warehouse construction.

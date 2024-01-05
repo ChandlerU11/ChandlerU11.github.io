@@ -21,3 +21,10 @@ knowledge of the algorithmic effects of sharing or not sharing.
 </html>
 
 {{< /rawhtml >}}
+
+# Adversarial Attacks on Fake News Detectors with Real User Comments 
+*Submitted*
+
+
+# Transformer Reinforcement Learning Approach to Attack Automatic Fake News Detectors
+*Work in Progress*
