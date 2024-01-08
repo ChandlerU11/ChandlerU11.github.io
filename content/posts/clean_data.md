@@ -3,6 +3,8 @@ title: Cleaning Up Years of Running Data
 date: 2023-08-19
 author: Chandler Underwood
 description: In this project I use several techniques to clean up and fill-in my running data from college that spans 6 years.
+ShowToc: true
+TocOpen: true
 ---
 ## Introduction
 For those of you that don't know me personally, I managed to run collegiately for 6 years (thanks Covid?). Over that time I logged a lot of miles and a lot Garmin activities. I still run quite a bit, but my days of trying to really burn the barn down are behind me. I'd like to build a dashboard to get some insights to my running trends during that time as a sort of "last hoorah", but sadly, a lot of my running data is missing and messy. I think cleaning it up will make for a great data science project to test my skills! Follow along here as I clean-up and fill-in my running data using various techniques such as pulling in outside data sources and training some ML models to predict missing values. 

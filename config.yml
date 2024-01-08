@@ -1,6 +1,6 @@
 baseURL: ""
 languageCode: en-US
-title: Chandler U
+title: Chandler Underwood
 theme: PaperMod
 homeInfoParams:
     Title: "Hi there \U0001F44B"
@@ -11,7 +11,7 @@ params:
   profileMode:
     enabled: true
     title: "Hello!" # optional default will be site title
-    subtitle: "Welcome to my portfolio website. Please browse around to find out more about my background and check out some of my projects."
+    subtitle: "Welcome to my portfolio. As I'm sure you're wondering...yes, I do a little modeling, and I have been published (once) - not in a magazine but in an academic journal. Somewhat funny jokes aside, my name is Chandler, and I'm a serious data scientist. I love learning and using data to solve problems, and I feel very lucky to have the opportunity to work in this awesome field. I hope you enjoy your time here while you check out my background and projects!"
     imageUrl: "screenshot.png" # optional
     imageTitle: "blah" # optional
     imageWidth: 200 # custom size
