@@ -33,7 +33,7 @@ menu:
       url: /about/
       weight: 10
     - identifier: archives
-      name: Posts
+      name: Archives
       url: /archives/
       weight: 20 
     - identifier: projects
