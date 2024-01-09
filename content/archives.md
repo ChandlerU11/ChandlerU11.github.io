@@ -1,5 +1,5 @@
 ---
 title: "Posts"
-layout: "archives"
-url: "/archives/"
+layout: "posts"
+url: "/posts/"
 ---
