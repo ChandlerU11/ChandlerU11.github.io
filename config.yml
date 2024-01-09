@@ -1,54 +1,179 @@
-
+# If your site is in 'https', then make sure your base url isn't written using 'http' otherwise your sitemap would
+# contain http (as opposeed to https) URLs. This would affect Google indexing of your URLs.
 baseURL: "https://chandleru11.github.io/"
-languageCode: en-US
 title: Chandler Underwood
-theme: hugo-PaperMod
-homeInfoParams:
-    Title: "Hi there \U0001F44B"
-    Content: Welcome to my blog
-# profile-mode
+paginate: 5
+theme: [hugo-PaperMod]
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+pygmentsUseClasses: true
+mainsections: ["posts", "papermod"]
+# googleAnalytics: UA-123-45
+
+minify:
+  disableXML: true
+  # minifyOutput: true
+
+languages:
+  en:
+    languageName: "English"
+    weight: 1
+    taxonomies:
+      category: categories
+      tag: tags
+      series: series
+    menu:
+      main:
+        - name: About
+          url: /about/
+          weight: 1
+        - name: Posts
+          url: archives
+          weight: 2
+        - name: Projects
+          url: projects
+          weight: 3
+        - name: Publications
+          url: publications
+          weight: 4
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
 
 params:
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  description: "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"
+  author: Theme PaperMod
+  # author: ["Me", "You"] # multiple authors
+
+  defaultTheme: auto
+  # disableThemeToggle: true
+  ShowShareButtons: false
+  ShowReadingTime: true
+  # disableSpecial1stPost: true
+  displayFullLangName: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowRssButtonInSectionTermList: true
+  ShowAllPagesInArchive: false
+  ShowPageNums: true
+  ShowToc: false
+  # comments: false
+  images: ["images/papermod-cover.png"]
+
   profileMode:
-    enabled: true
-    title: "Hello!" # optional default will be site title
-    subtitle: "Welcome to my portfolio. As I'm sure you're wondering...yes, I do a little modeling, and I have been published (once) - not in a magazine but in an academic journal. Somewhat funny jokes aside, my name is Chandler, and I'm a serious data scientist. I love learning and using data to solve problems, and I feel very lucky to have the opportunity to work in this awesome field. I hope you enjoy your time here while you check out my background and projects!"
-    imageUrl: "screenshot.png" # optional
-    imageTitle: "blah" # optional
-    imageWidth: 200 # custom size
-    imageHeight: 200 # custom size
-    
-  socialIcons: # optional
-    - name: "github"
+    enabled: True
+    title: Hello!
+    subtitle: Welcome to my portfolio. As I'm sure you're wondering...yes, I do a little modeling, and I have been published (once) - not in a magazine but in an academic journal. Somewhat funny jokes aside, my name is Chandler, and I'm a serious data scientist. I love learning and using data to solve problems, and I feel very lucky to have the opportunity to work in this awesome field. I hope you enjoy your time here while you check out my background and projects!
+    imageUrl: "screenshot.png"
+    imageTitle: my image
+    imageWidth: 240
+    imageHeight: 240
+    buttons:
+      - name: Posts
+        url: archives
+
+
+  homeInfoParams:
+    Title: "PaperMod's Demo"
+    Content: >
+      👋 Welcome to demo page of Hugo's theme PaperMod!
+
+      - **PaperMod**  is designed to be clean and simple but fast and responsive theme with useful feature-set that enhances UX.
+
+      - Feel free to show your support by giving us a star 🌟 on GitHub and sharing with your friends and social media .
+
+      - PaperMod is based on theme [Paper](https://github.com/nanxiaobei/hugo-paper/tree/4330c8b12aa48bfdecbcad6ad66145f679a430b3).
+
+  socialIcons:
+    - name: github
+      title: Find me on Github
       url: "https://github.com/ChandlerU11"
-    - name: "linkedin"
+    - name: linkedin
+      title: Find me on LinkedIn
       url: "https://www.linkedin.com/in/chandler-underwood-421bbb162/"
-    - name: "strava"
+    - name: strava
+      title: Find me on Strava
       url: "https://www.strava.com/athletes/55427636"
 
-menu:
-  main:
-    - identifier: about
-      name: About
-      url: /about/
-      weight: 10
-    - identifier: archives
-      name: Archives
-      url: /archives/
-      weight: 20 
-    - identifier: projects
-      name: Projects
-      url: /projects/
-      weight: 30      
-    - identifier: publications
-      name: Publications
-      url: /publications/
-      weight: 40 
-    - identifier: categories
-      name: Categories
-      url: /categories/
-      weight: 50
-    - identifier: Tags
-      name: Tags
-      url: /tags/
-      weight: 60
+  editPost:
+    URL: "https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content"
+    Text: "Suggest Changes" # edit text
+    appendFilePath: true # to append file path to Edit link
+
+  # label:
+  # iconSVG: '<svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 -960 960 960" fill="currentColor"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>'
+  # text: "Home"
+  # icon: icon.png
+  # iconHeight: 35
+
+  # analytics:
+  #     google:
+  #         SiteVerificationTag: "XYZabc"
+
+  assets:
+    disableHLJS: true
+  #     favicon: "<link / abs url>"
+  #     favicon16x16: "<link / abs url>"
+  #     favicon32x32: "<link / abs url>"
+  #     apple_touch_icon: "<link / abs url>"
+  #     safari_pinned_tab: "<link / abs url>"
+
+  # cover:
+  #     hidden: true # hide everywhere but not in structured data
+  #     hiddenInList: true # hide on list pages and home
+  #     hiddenInSingle: true # hide on single page
+
+  # fuseOpts:
+  #     isCaseSensitive: false
+  #     shouldSort: true
+  #     location: 0
+  #     distance: 1000
+  #     threshold: 0.4
+  #     minMatchCharLength: 0
+  #     keys: ["title", "permalink", "summary", "content"]
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    # anchorLineNos: true
+    # codeFences: true
+    # guessSyntax: true
+    # lineNos: true
+    # style: monokai
+
+# privacy:
+#   vimeo:
+#     disabled: false
+#     simple: true
+
+#   twitter:
+#     disabled: false
+#     enableDNT: true
+#     simple: true
+
+#   instagram:
+#     disabled: false
+#     simple: true
+
+#   youtube:
+#     disabled: false
+#     privacyEnhanced: true
+
+services:
+  instagram:
+    disableInlineCSS: true
+  twitter:
+    disableInlineCSS: true
