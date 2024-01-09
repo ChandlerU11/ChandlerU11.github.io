@@ -3,7 +3,7 @@
 baseURL: "https://chandleru11.github.io/"
 title: PaperMod
 paginate: 5
-theme: [PaperMod]
+theme: [hugo-PaperMod]
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
