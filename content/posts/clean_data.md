@@ -7,7 +7,7 @@ ShowToc: true
 TocOpen: true
 ---
 ## Introduction
-For those of you that don't know me personally, I managed to run collegiately for 6 years (thanks Covid?). Over that time I logged a lot of miles and a lot Garmin activities. I still run quite a bit, but my days of trying to really burn the barn down are behind me. I'd like to build a dashboard to get some insights to my running trends during that time as a sort of "last hoorah", but sadly, a lot of my running data is missing and messy. I think cleaning it up will make for a great data science project to test my skills! Follow along here as I clean-up and fill-in my running data using various techniques such as pulling in outside data sources and training some ML models to predict missing values. 
+For those of you that don't know me personally, I managed to run collegiately for 6 years (thanks Covid?). Over that time I logged a lot of miles and a lot Garmin activities. I still run quite a bit, but my days of trying to really burn the barn down are behind me. I'd like to build a dashboard to get some insights to my running trends during that time as a sort of "last hoorah", but sadly, a lot of my running data is missing and messy. I think cleaning it up will make for a great project to test my skills! Follow along here as I clean-up and fill-in my running data using various techniques such as pulling in outside data sources and training some ML models to predict missing values. 
 
 ## Data Read-in and Initial Exploration
 Below is a first look at my running data from college. Over the span of 6 years, I went for a run at least 1,975 times! 

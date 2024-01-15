@@ -73,7 +73,7 @@ params:
   profileMode:
     enabled: True
     title: Hello!
-    subtitle: Welcome to my portfolio. As I'm sure you're wondering...yes, I do a little modeling, and I have been published (once) - not in a magazine but in an academic journal. Somewhat funny jokes aside, my name is Chandler, and I'm a serious data scientist. I love learning and using data to solve problems, and I feel very lucky to have the opportunity to work in this awesome field. I hope you enjoy your time here while you check out my background and projects!
+    subtitle: Welcome to my portfolio. My name is Chandler, and I'm a machine learning engineer / data scientist (depending on the day) with strong interest and experience in NLP and reinforcement learning. In my most recent role as a researcher at Boise State University, I used reinforcment learning techniques to fine-tune transformer models as adversaries. I love all things data and machine learning and have tailored my education to prepare me for a job in the world of data. I believe it's a privilage to work in such an exciting field, and I'm excited to see what the future holds. I hope you enjoy your time here, and always feel free to reach out!
     imageUrl: "screenshot.png"
     imageTitle: my image
     imageWidth: 240
