@@ -1,6 +1,6 @@
 ---
 title: Building a Product Reviews Webscraper
-date: 2023-09-30
+date: 2023-09-15
 author: Chandler Underwood
 description: Using the Python Requests and Beautiful Soup libraries, I construct a webscraper that can farm product reviews off of Zappos.com.
 ShowToc: true
