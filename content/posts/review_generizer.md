@@ -8,7 +8,7 @@ TocOpen: true
 ---
 
 # Motivation
-In my last post where I scraped reviews for Crocs Clogs, I mentioned that I often find myself wishing for a succinct summary of all the reviews for a product. Let's flesh that out a bit more. What I mean when I say "succinct summary" is that I want a quick understanding of a specific aspect of a given product. For example, I know that crocs come in amazing colors already. I can see that in the photos. But, how do they fit? What about their durability? I find myself often most concerned with a specific aspect of a product such as those. I want to know what people are typically saying about fit and durability. Many retailers offer a search bar for reviews, so you can filter reviews on a keyword. BUT, searching for "fit" across all crocs reviews would return a ton of samples, and how can we know which ones are representative of the general sentiment people have in regards to fit? What if we could give consumers a snapshot of the reviews containing a word or phrase they search for? Could we show them a small set of reviews that best represent all the reviews that mention the word "fit", for example? I think we can!
+In my last post where I scraped reviews for Crocs Clogs, I mentioned that I often find myself wishing for a succinct summary of the reviews for a product. Let's flesh that out a bit more. What I mean when I say "succinct summary" is that I want a quick understanding of a specific aspect of a given product. For example, I know that crocs come in amazing colors already. I can see that in the photos. But, how do they fit? What about their durability? I find myself often most concerned with a specific aspect of a product such as those. I want to know what people are typically saying about fit and durability. Many retailers offer a search bar for reviews, so you can filter reviews on a keyword. BUT, searching for "fit" across all crocs reviews would return a ton of samples, and how can we know which ones are representative of the general sentiment people have in regards to fit? What if we could give consumers a snapshot of the reviews containing a word or phrase they search for? Could we show them a small set of reviews that best represent all the reviews that mention the word "fit", for example? I think we can!
 
 # How to Make it Happen
 Did someone say clustering??? Because they would be correct. Unsupervised clustering of the reviews will allow us to find the most typical subset, and *k*-means will be very helpful here. 
@@ -178,7 +178,6 @@ df
 </table>
 <p>9238 rows × 4 columns</p>
 </div>
-
 
 
 # Finding Typical Reviews
