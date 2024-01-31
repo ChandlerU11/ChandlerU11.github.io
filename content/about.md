@@ -11,6 +11,7 @@ author: Chandler
 **Boise State University** | *Graduation Date: August, 2023*
 - Relevant Coursework: 
   - Deep Learning
+  - Intro to Data Science
   - Large-Scale Data Analysis
   - Machine Learning
   - Natural Language Processing 
@@ -21,6 +22,7 @@ author: Chandler
   - Calculus I-IV
   - Database Management Systems
   - Data Structures and Algorithms
+  - Linear Algebra
   - Object-Oriented Programming
   - Statistal Inference and Probability
 
