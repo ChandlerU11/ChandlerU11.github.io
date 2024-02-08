@@ -1,6 +1,6 @@
 ---
 title: Building a Product Reviews Webscraper
-date: 2023-09-15
+date: 2023-12-20
 author: Chandler Underwood
 description: Using the Python Requests and Beautiful Soup libraries, I construct a webscraper that can farm product reviews off of Zappos.com.
 ShowToc: true
@@ -8,7 +8,7 @@ TocOpen: true
 ---
 
 # Motivation
-I do quite a bit of online shopping (who doesn't these days), and I oftentimes find myself pouring over the reviews for a product trying to decide if it's right for me. Many of these times I've found myself wishing that there was a succinct summary of all the reviews I could read to speed up this whole process. I've yet to see any online retailers doing exactly what I'm looking for, so I figured I'd make it happen myself. For this quasi "proof-of-concept", I wanted to use data that was fun, interesting, and maybe even a little contraversial...after much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, Crocs. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset containing reviews for Crocs Clogs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can train a review summarizer for the most loved and hated shoes on the planet! 
+I do quite a bit of online shopping, and I oftentimes find myself pouring over the reviews for a product trying to decide if it's right for me. Many of these times I've found myself wishing that there was a succinct summary of all the reviews I could read to speed up this whole process. I've yet to see any online retailers doing exactly what I'm looking for, so I figured I'd make it happen myself. For this quasi "proof-of-concept", I wanted to use data that was fun, interesting, and maybe even a little contraversial...after much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, Crocs. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset containing reviews for Crocs Clogs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can train a review summarizer for the most loved and hated shoes on the planet! 
 
 # What tools can we use? 
 There are several Python libraries that are helpful for webscraping:
