@@ -34,18 +34,18 @@ author: Chandler
 *Research Associate* | August 2023 - Present
 
 *Graduate Research Assistant* | August 2022 – August 2023
-- Studied state-of-the-art developments in the field of Adversarial Machine Learning to establish a strong foundation for research.
-- Collected, cleaned, and preprocessed large datasets using Pandas and NLTK, ensuring data quality and integrity for model training and evaluation.
-- Collaborated with a team of researchers to design, develop, and implement adversarial machine learning algorithms using reinforcement and deep learning techniques for fine-tuning transformer-based models that outperform current state-of-the-art adversaries.
-- Contributed to multiple research papers and presented findings at a conference.
+- Collaborated with a team of researchers to design and implement text-based adversarial generative models using reinforcement learning techniques that are nearly *three* times as effective as current state-of-the-art adversaries.
+- Studied and implemented state-of-the-art developments in Adversarial Machine Learning and Misinformation Detection to establish a strong foundation for research.
+- Collected and preprocessed large, complex datasets, ensuring data quality and integrity for model training and evaluation.
+- Contributed to multiple groundbreaking research papers and presented findings at a conference.
 
 
 ## Charles Schwab Corporation
 *Business Intelligence Intern* | June 2020 – August 2020
-- Assisted in construction of customer classification model using Python machine learning libraries. 
-- Explained model to stakeholders to influence resource allocation for future data science projects. 
-- Lead analytics intern team in study of internship cohort satisfaction.
-- Designed visualizations using customer and intern data with Tableau. 
+- Worked with data science team to develop and validate a series of customer churn classification models using Scikit-Learn. 
+- Lead analytics team in data collection and analysis of internship cohort satisfaction and demographics.
+- Presented model performance and business impact of customer churn classification models along with results of internship cohort study to stakeholders using Tableau visualizations. 
+
 
 ## Trustmark Bank
 *IT Co-Op Associate* | June 2019 – December 2019
