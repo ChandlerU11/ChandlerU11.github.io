@@ -1,6 +1,6 @@
 ---
 title: Using Unsupervised ML to 'Typicalize' Product Reviews
-date: 2023-11-15
+date: 2023-12-15
 author: Chandler Underwood
 description: Using NLP and unsupervised machine learning techniques, I create a model that can select the most typical samples to represent a set of reviews containing a keyword.
 ShowToc: true
