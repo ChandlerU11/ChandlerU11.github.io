@@ -72,8 +72,8 @@ params:
 
   profileMode:
     enabled: True
-    title: Hello!
-    subtitle: Welcome to my portfolio. My name is Chandler, and I'm a machine learning engineer / data scientist with strong interest and experience in NLP and Reinforcement Learning. In my most recent role as a researcher at Boise State University, I used reinforcement learning techniques to train generative text-based models as adversaries for attacking misinformation detection systems. I love all things data and machine learning and have tailored my education to prepare me to work in this exciting field. I hope you enjoy your time here, and always feel free to reach out!
+    title: Hello from Chandler!
+    subtitle: Welcome to my portfolio. I'm a machine learning engineer / data scientist with strong interest and experience in NLP and Reinforcement Learning. In my most recent role as a researcher at Boise State University, I used reinforcement learning techniques to train generative text-based models as adversaries for attacking misinformation detection systems. I love all things data and machine learning, and I hope you enjoy your time here!
     imageUrl: "screenshot.png"
     imageTitle: image
     imageWidth: 240
