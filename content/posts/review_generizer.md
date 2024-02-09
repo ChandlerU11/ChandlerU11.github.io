@@ -263,7 +263,11 @@ def find_most_typical(df, word, rating, vect, asc = True):
     df['distance_to_center'] = kmeans_distance(df, vect)
 
     print("There are", len(df), rating, "reviews that mention:", word)
-    print("The most typical reviews are:")
+
+    if asc == True:
+      print("The most typical reviews are:")
+    else:
+      print("The most atypical reviews are:")
     for each in df.sort_values(by = 'distance_to_center', ascending = asc)['review'].tolist()[:3]:
         print('# ', each)
 ```
@@ -299,7 +303,7 @@ find_most_typical(df, 'crocs', 'positive', 'tfidf', asc = False)
 ```
 
     There are 2268 positive reviews that mention: crocs
-    Most typical reviews are:
+    Most atypical reviews are:
     #  Lids adore their Crocs! Fun with swapping charms and accessoryizing.
     #  Purr Nickis Impact Crocs. Ima need you to give my girl a ha check!!!!
     #  You can turn any none-croc person into a croc lover.
@@ -311,7 +315,7 @@ find_most_typical(df, 'crocs', 'positive', 'count', asc = False)
 ```
 
     There are 2268 positive reviews that mention: crocs
-    Most typical reviews are:
+    Most atypical reviews are:
     #  Do you really need one more Croc review to convince you to buy these shoes? Never in a kabillion years did I think I'd ever buy a pair of Crocs. Nope, not my style, not my vibe, and not me, ever. But the husband had plantar fasciitis in one of his feet, and the pain was incredible. There are several options for shoes, but we're on a budget, and I kept reading about Crocs as a good starting point. So I ordered him some Crocs in the olive green. Then I thought, "My husband is a big baby. I should order myself a pair, wear them around for a day, and rave about them so he'll immediately start wearing his own pair of Crocs and start healing his feet." The thing is, I was totally gobsmacked. At first the prickly nubs in the footbed were a bit distracting, but as I started walking around in them, they became less noticeable, and within the first twenty minutes or so, my feet started to feel energized and soothed. I went outside and swept the deck and did some chicken chores, and I was just in heaven. My legs felt supported and I had this incredible feeling of a whole body support system, starting with the acupressure from the footbed nubs and the lightweight shoe material and the fabulous cushioning. These shoes haven't had enough time to mold to my feet, and I'm already blissed out wearing them. I got mine in the olive green, too. They're earthy and surprisingly cute. My husband hasn't worn a clog in his entire life and walked off wearing them for the first time as if little elves were sitting inside his shoes and if he stepped down too hard, they'd get squished and died. A few minutes later, I saw him disappear down the hill at the back of our property. He can't walk when he gets home, his feet are in that much pain.
     #  I was looking for something to wear at night while I was on the AIDS/Lifecycle. It's a 545 mile bicycle ride from San Francisco to Los Angeles where we raise money for services to HIV+ patients. The ride involves six nights of camping. It's a huge event and the evenings involve a lot of walking. We are allowed 70lbs of gear, but we have to haul our gear to our tent site every night, so traveling light is important. I wanted one pair of shoes for the week that I could put on after riding my bike all day and they would be comfortable enough to wear all week. I wanted one pair of shoes that wasn't going to get icky if the grass was wet at the campsite in the morning. I wanted one pair of shoes that kept my feet warm while I was walking around the campsite in the evening. These shoes totally fit the bill. After beating up my feet all day in cleats on the bike, they were a welcome respite. They allowed air to flow, but my feet never got cold at night. Dirt just wiped off. If I got some gravel in them, it kicked right back out. These shoes were so comfortable I found myself next to the gear trucks digging through my bag to find them and put them on. I know a lot of athletes use Crocs after their activity to kick around in, and these shoes are the shiznit!
     #  These are my first Crocs, and lavender seems to run *almost* a size small. I would say the size 8 Crocs in lavender fits closer to 7 than size 8 street shoes. For reference, I wear size 7 in street shoes (Vans, Converse, Franco Sarto boots, Timberland Kinsley boots), size 38 European shoes (Veja), size 8 running shoes (Mizuno Wave Riders), size 8 Vasque Mesa Trek hiking boots. If you can, try them on. When I measured my feet and checked the Crocs size chart, it said I was a size 10, which would have been way too big. Size 8 lavender fit me roomy but comfortable, whether I'm barefoot or wearing thick, fluffy socks, with or without the Crocs shoe strap. They're super comfy!
