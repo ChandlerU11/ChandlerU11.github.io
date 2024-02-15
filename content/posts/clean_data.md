@@ -429,14 +429,14 @@ df.info()
     memory usage: 279.5+ KB
     
 
-Over half of the values in the *Avg HR*, *Max HR*, *Min Temp* and *Max Temp* columns are NULL. Remember, I'm doing this, so I can get a better understanding of trends in my running data over the years I ran in college. I wan't to create some visualizations with this data in the future, and all these values are important in getting a "big picture" look at my runnning trends. To fill in the missing data, we have four options: 
+Over half of the values in the *Avg HR*, *Max HR*, *Min Temp* and *Max Temp* columns are NULL. Remember, I'm doing this, so I can get a better understanding of trends in my running data over the years I ran in college. I wan't to create some visualizations with this data in the future, and all these values are important in getting a "big picture" look at my runnning trends. To deal with the missing data, we have four options: 
 
 1. Drop the rows that are missing data. 
 2. Fill NULL rows with some sort of common value (oftentimes the median of the column in question).
 3. Bring in an outside data source.
 4. Create a predictive model. 
 
-Option 1 is not going to work here as that would eliminate half my data. Option 2 works OK for the columns that are missing only a few features, but it would definitely take away from the richness of the data and make for some boring / unhelpful visualizations if we used it for all the missing values in the dataset. But, option 3 can work great for filling in the tempurature data as it is easy to find weather data, and option 4 is the way to go for fixing the HR data.
+Option 1 is not going to work here as that would eliminate nearly two thirds of my data. Option 2 works OK for the columns that are missing only a few features, but it would definitely take away from the richness of the data and make for some boring / unhelpful visualizations if we used it for all the missing values in the dataset. But, option 3 can work great for filling in the tempurature data as it is easy to find weather data, and option 4 is the way to go for fixing the HR data.
 
 
 ```python
