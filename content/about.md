@@ -36,7 +36,7 @@ author: Chandler
 *Graduate Research Assistant* | August 2022 – August 2023
 - Collaborated with a team of researchers to design and implement text-based adversarial generative models using reinforcement learning (RL) techniques that are nearly *three* times as effective as current state-of-the-art adversaries.
 - Created custom, text-based misinformation classifiers using PyTorch and Transformers for use as policies during RL training. 
-- Implemented and studied state-of-the-art developments in Adversarial Machine Learning, Generative AI, and Misinformation Detection to drive research efforts.
+- Implemented and studied state-of-the-art developments in Adversarial Machine Learning and Misinformation Detection to drive research efforts.
 - Collected and preprocessed large, complex datasets, ensuring data quality and integrity for model training and evaluation.
 - Contributed to multiple groundbreaking research papers and presented findings at a conference.
 
