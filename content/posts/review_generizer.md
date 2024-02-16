@@ -18,7 +18,7 @@ According to Wikipedia - *k-means clustering is a method of vector quantization,
 In other words, *k*-means searches for the best representation of each cluster (the center) and assigns samples to a cluster based on their distance from each cluster center. So, we can say that a cluster's center is an approximation of all the cluster's members. Following this line of thinking, if we fit a *k*-means model to some data and only ask it to find 1 cluster, the calculated cluster center will act as a prototype for all the data that was passed to the model. To find the most representative subset of reviews for a particular keyword, we can filter the reviews based on the keyword, find a cluster center for the samples, and get the X closest samples to the centroid. The closest samples to the centroid will be the most representative of the population. If this isn't clear, check out the GIF below and imagine we're only trying to make one cluster. Think about how the centroid would move in that scenario.
 
 ![Scenario 1: Across columns](/keans.gif)
-Credit - https://towardsdatascience.com/clear-and-visual-explanation-of-the-k-means-algorithm-applied-to-image-compression-b7fdc547e410
+Credit - Sebastian Charmot, https://towardsdatascience.com/clear-and-visual-explanation-of-the-k-means-algorithm-applied-to-image-compression-b7fdc547e410
 
 # Tools Needed
 Of course we will need Pandas to make for easy data manipulation and usage. We also will need to clean up our text data, so we'll use NLTK. Finally, we need a way to vectorize the text and fit a *k*-means model to it, so we'll use Scikit-Learn for that part. 
