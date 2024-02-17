@@ -323,27 +323,61 @@ df
 {{< /rawhtml >}}
 
 
-Let's have a look at the columns in our dataset.
+Let's have a look at the columns and datatypes of our dataset.
 
 ```python
-df.columns
+df.info()
 ```
-    Index(['Activity Type', 'Date', 'Favorite', 'Title', 'Distance', 'Calories',
-           'Time', 'Avg HR', 'Max HR', 'Avg Run Cadence', 'Max Run Cadence',
-           'Avg Pace', 'Best Pace', 'Total Ascent', 'Total Descent',
-           'Avg Stride Length', 'Avg Vertical Ratio', 'Avg Vertical Oscillation',
-           'Avg Ground Contact Time', 'Training Stress Score®', 'Avg Power',
-           'Max Power', 'Grit', 'Flow', 'Avg. Swolf', 'Avg Stroke Rate',
-           'Total Reps', 'Dive Time', 'Min Temp', 'Surface Interval',
-           'Decompression', 'Best Lap Time', 'Number of Laps', 'Max Temp',
-           'Moving Time', 'Elapsed Time', 'Min Elevation', 'Max Elevation'],
-          dtype='object')
 
-
+    <class 'pandas.core.frame.DataFrame'>
+    RangeIndex: 1975 entries, 0 to 1974
+    Data columns (total 38 columns):
+     #   Column                    Non-Null Count  Dtype  
+    ---  ------                    --------------  -----  
+     0   Activity Type             1975 non-null   object 
+     1   Date                      1975 non-null   object 
+     2   Favorite                  1975 non-null   bool   
+     3   Title                     1975 non-null   object 
+     4   Distance                  1975 non-null   float64
+     5   Calories                  1975 non-null   object 
+     6   Time                      1975 non-null   object 
+     7   Avg HR                    1975 non-null   int64  
+     8   Max HR                    1975 non-null   int64  
+     9   Avg Run Cadence           1975 non-null   object 
+     10  Max Run Cadence           1975 non-null   object 
+     11  Avg Pace                  1975 non-null   object 
+     12  Best Pace                 1975 non-null   object 
+     13  Total Ascent              1975 non-null   object 
+     14  Total Descent             1975 non-null   object 
+     15  Avg Stride Length         1975 non-null   float64
+     16  Avg Vertical Ratio        1975 non-null   float64
+     17  Avg Vertical Oscillation  1975 non-null   float64
+     18  Avg Ground Contact Time   1975 non-null   int64  
+     19  Training Stress Score®    1975 non-null   float64
+     20  Avg Power                 1975 non-null   int64  
+     21  Max Power                 1975 non-null   int64  
+     22  Grit                      1975 non-null   float64
+     23  Flow                      1975 non-null   float64
+     24  Avg. Swolf                1975 non-null   int64  
+     25  Avg Stroke Rate           1975 non-null   int64  
+     26  Total Reps                1975 non-null   int64  
+     27  Dive Time                 1975 non-null   object 
+     28  Min Temp                  1975 non-null   float64
+     29  Surface Interval          1975 non-null   object 
+     30  Decompression             1975 non-null   object 
+     31  Best Lap Time             1975 non-null   object 
+     32  Number of Laps            1975 non-null   object 
+     33  Max Temp                  1975 non-null   float64
+     34  Moving Time               1975 non-null   object 
+     35  Elapsed Time              1975 non-null   object 
+     36  Min Elevation             1975 non-null   object 
+     37  Max Elevation             1975 non-null   object 
+    dtypes: bool(1), float64(9), int64(8), object(20)
+    memory usage: 573.0+ KB
 
 As you may have guessed, after reading Garmin's documentation, many of the data's attributes are not useful to us as they are not metrics taken for runs such as *Max Power* (a cycling metric) and *Avg Stroke Rate* (a swimming metric). In the cleanup and feature engineering section, we'll drop those and many others that aren't helpful for understanding my running performances. 
 
-This first issue with this dataset is that the *Avg HR* and *Max HR* columns are populated with some zeros (see table), and I assure you that my heart was beating faster than that! The *Max Temp* and *Min Temp* columns also contain some zeroes. This is because I didn't have a fancy watch in the beginning of college that logged those metrics. Because of this, we can assume that the 0's populating those four columns are actually NULL values. Many of our columns should contain numerical data but instead contain strings such as *Min Elevation*, so we are going to fix that in the next section too. 
+The first issue with this dataset is that the *Avg HR* and *Max HR* columns are populated with some zeros (see table above), and I assure you that my heart was beating faster than that! The *Max Temp* and *Min Temp* columns also contain some zeroes. This is because I didn't have a fancy watch in the beginning of college that logged those metrics. Because of this we can assume that the 0's populating those four columns are actually NULL / missing values. Many of our columns should contain numerical data but instead contain strings such as *Min Elevation*, so we are going to fix that in the next section too. 
 
 ## Data Cleaning and Feature Engineering
 
@@ -382,7 +416,7 @@ There are a few important columns that are written in a time format that is usef
 
 
 ```python
-#Drop rows we don't have pacing data for
+#Drop activities saved by accident
 df = df[df['Avg Pace'].notna()]
 df = df[df['Best Pace'].notna()]
 
@@ -440,7 +474,7 @@ Option 1 is not going to work here as that would eliminate nearly two thirds of 
 
 
 ```python
-#Using Option 2 to infill missing data 
+#Using Option 2 to infill missing data with only a few NULLs
 cols_with_few_nan = ['Total Ascent', 'Total Descent','Min Elevation', 'Max Elevation']
 df[cols_with_few_nan] = df[cols_with_few_nan].fillna(df[cols_with_few_nan].median())
 ```
