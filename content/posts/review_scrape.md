@@ -8,6 +8,8 @@ TocOpen: true
 ---
 
 # Motivation
+Before we get into things, here's a [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you would like. 
+
 Do you ever find yourself pouring over a product's reviews trying to decide if it's right for you? I sure do. Many of these times I've wished there was a quick summary of the reviews I could read to speed up the decision process. I've yet to see any online retailers doing exactly what I'm looking for, so I've decided to make my own review summarizer. But, we need some data for training such a tool.
 
 For this project I wanted to use data that was fun, interesting, and maybe even a little contraversial... After much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, I'm talking about the clunky rubber footwear my grandmother wears while gardening that some fashionistas would consider an abomination. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset containing reviews for Crocs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can train a review summarizer for the most loved and hated shoes on the planet! 
@@ -124,4 +126,4 @@ review_df = pd.DataFrame({'review': reviews, 'rating': ratings, 'date': date})
 review_df.to_csv("Zappos_Croc_Reviews_Total.csv")
 ```
 
-Soon after extracting from the webpages, I found that Zappos does not publish reviews after the 400th page :(. We got a decent amount of data, however! We ended up with over 9,000 distinct reviews for Crocs.
+Soon after extracting from the webpages, I found that Zappos does not publish reviews after the 400th page :(. We got a decent amount of data, however! We ended up with over 9,000 distinct reviews for Crocs. Again, here's the [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you'd like. 
