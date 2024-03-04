@@ -46,7 +46,7 @@ author: Chandler
 - Developed and validated multiple customer churn classification models, achieving a true positive rate of 78%.
 - Lead analytics team in data collection and analysis of internship cohort satisfaction and demographics.
 - Presented business impact of customer churn models along with internship cohort analysis to cross-functional stakeholders using visualizations.
-*Technologies*: Python, Pandas, Numpy, Scikit-Learn, Tableau
+- *Technologies*: Python, Pandas, Numpy, Scikit-Learn, Tableau
 
 
 ## Trustmark Bank
