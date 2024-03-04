@@ -2,15 +2,15 @@
 title: College Running Data Dashboard
 date: 2024-02-14
 author: Chandler Underwood
-description: Using the running data I cleaned up in a previous post, I create a Tableau dashboard that allows for dynamic granularity changes from a year down to day level.
+description: Using the running data I cleaned up in a previous post, I create a Tableau dashboard that allows for dynamic granularity changes from the year down to day level.
 ShowToc: true
 TocOpen: true
 ---
 
 # About
-This post contains the dashboard I built to go along with my data cleaning project where I clean up over 6 years of my running data from college. Shoutout to Andy Kriebel and his awesome YouTube [video](https://www.youtube.com/watch?v=EZMLjMaZYSs&t=308s) for getting me started! 
+This post contains the dashboard I built to go along with my [data cleaning project]({{< ref "clean_data.md" >}}) where I clean up my own running data from college. Shoutout to Andy Kriebel and his awesome YouTube [video](https://www.youtube.com/watch?v=EZMLjMaZYSs&t=308s) for getting me started! 
 
-The dashboard allows for dynamic exploration of the time series data from years down to days. I would recomend opening up the visualization to full screen so you can see the "timeframe snapshots" along with my most important running stats.
+The dashboard allows for dynamic exploration of the time series data from years down to days. I would recomend opening up the visualization to full screen, so you can see the "timeframe snapshots" along with my most important running stats.
 
 
 # The Dashboard
