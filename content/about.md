@@ -34,22 +34,23 @@ author: Chandler
 *Research Associate* | August 2023 - Present
 
 *Graduate Research Assistant* | August 2022 – August 2023
-- Collaborated with a team of researchers to design and implement text-based adversarial generative models using reinforcement learning (RL) techniques that are nearly *three* times as effective as current state-of-the-art adversaries.
-- Created custom, text-based misinformation classifiers using PyTorch and Transformers for use as policies during RL training. 
+- Designed and implemented text-based generative adversarial models using reinforcement learning (RL) techniques that are nearly *three* times as effective as current state-of-the-art adversaries.
+- Developed text-based misinformation classifiers capable of achieving 90% F1 scores for use as RL policies.
 - Implemented and studied state-of-the-art developments in Adversarial Machine Learning and Misinformation Detection to drive research efforts.
 - Collected and preprocessed large, complex datasets, ensuring data quality and integrity for model training and evaluation.
 - Contributed to multiple groundbreaking research papers and presented findings at a conference.
-
+- *Technologies*: Python, Pandas, Hugging Face Transformers, PyTorch, Scikit-Learn, NLTK, Numpy
 
 ## Charles Schwab Corporation
 *Business Intelligence Intern* | June 2020 – August 2020
-- Worked with data science team to develop and validate a series of customer churn classification models using Scikit-Learn. 
+- Developed and validated multiple customer churn classification models, achieving a true positive rate of 78%.
 - Lead analytics team in data collection and analysis of internship cohort satisfaction and demographics.
-- Presented model performance and business impact of customer churn classification models along with results of internship cohort study to stakeholders using Tableau visualizations. 
+- Presented business impact of customer churn models along with internship cohort analysis to cross-functional stakeholders using visualizations.
+*Technologies*: Python, Pandas, Numpy, Scikit-Learn, Tableau
 
 
 ## Trustmark Bank
 *IT Co-Op Associate* | June 2019 – December 2019
-- Collaborated with enterprise information systems team to assess and implement solutions for data driven business needs. 
-- Converted SQL queries for use with IBM Cognos to drive dashboards and daily reports.
-- Crafted backend SQL for intranet website to update, read, and delete enterprise codes used during data warehouse construction.
+- Created dashboards and daily reports to inform stakeholders of key performance indicators.
+- Crafted backend SQL for intranet website used to update, read, and delete enterprise codes.
+- *Technologies*: SQL, IBM Cognos Analytics
