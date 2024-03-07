@@ -106,7 +106,7 @@ def cus_rev_zappos(soup, b = True):
   return review, date, rating_return
   ```
 
-I then iterated over and extracted the text from the downloaded webpages using the following.  
+I then iterated over and extracted the text from the downloaded webpages using the following code, and we got a decent amount of data! There are over 9,000 distinct reviews here. Below is a glance at the data.
 
 ```python 
 from tqdm.notebook import tqdm
@@ -121,9 +121,107 @@ for x in tqdm(range(len(filenames))):
   ratings.extend(rating)
   dates.extend(date)
 
-review_df = pd.DataFrame({'review': reviews, 'rating': ratings, 'date': date})
+review_df = pd.DataFrame({'review': reviews, 'date': date, 'rating': ratings})
 
 review_df.to_csv("Zappos_Croc_Reviews_Total.csv")
+
+review_df.head(10)
+```
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>review</th>
+      <th>date</th>
+      <th>rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>!!!!!! E X C E L L E N T!!!!!!!!!!</td>
+      <td>April 7, 2022</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>"They're crocs; people know what crocs are."</td>
+      <td>April 3, 2021</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>- Quick delivery and the product arrived when ...</td>
+      <td>March 19, 2023</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>...amazing "new" color!! who knew?? love - lov...</td>
+      <td>July 17, 2022</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0 complaints from me; this is the 8th pair of ...</td>
+      <td>June 4, 2021</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>10/10 I ran from the cops in mine, and they ar...</td>
+      <td>July 2, 2023</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>The 11 year old granddaughter loves them!!!!!!</td>
+      <td>August 7, 2022</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>The 11 yr old daughter loves them.</td>
+      <td>August 7, 2022</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>12M classic clogs made in Vietnam are great, a...</td>
+      <td>April 25, 2023</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>My 13 year old grandson chose this color and l...</td>
+      <td>March 13, 2023</td>
+      <td>5.0</td>
+    </tr>
+  </tbody>
+</table>
+
+Let's make a wordcloud to get some understanding of the most popular words in the dataset.
+
+```python
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+from os import path
+from PIL import Image
+import matplotlib.pyplot as plt
+
+# Start with one review:
+text = ' '.join(review_df['review'].to_list()).lower()
+
+# Create and generate a word cloud image:
+wordcloud = WordCloud(max_words=50, background_color="white").generate(text)
+
+# Display the generated image:
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.show()
 ```
 
-Soon after extracting from the webpages, I found that Zappos does not publish reviews after the 400th page :(. We got a decent amount of data, however! We ended up with over 9,000 distinct reviews for Crocs. Again, here's the [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you'd like. 
+
+    
+![png](/wordcloud.png)
+    
+"Croc" and "Love" seem to go together a lot. Why am I not surprised? :) I'm excited to see what I can do with this data in the future! Again, here's the [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you'd like. 
