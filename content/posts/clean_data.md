@@ -1,5 +1,5 @@
 ---
-title: Cleaning Up Years of Running Data
+title: Cleaning Up Years of Daily Running Data
 date: 2023-11-03
 author: Chandler Underwood
 description: In this project I use several techniques to clean up and fill-in my running data from college that spans 6 years.
