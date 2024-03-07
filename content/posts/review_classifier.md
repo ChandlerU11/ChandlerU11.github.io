@@ -2,13 +2,15 @@
 title: Imbalanced Product Review Sentiment Classification
 date: 2024-02-29
 author: Chandler Underwood
-description: Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in the crocs review dataset.
+description: Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset.
 ShowToc: true
 TocOpen: true
 ---
 
 ## Class Imbalance
-Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome croc reviews data is unfortunately not so awesome from a class balance standpoint. Soon, we'll assign binary class labels based on the rating a customer gave with their review where we'll consider ratings of 2 stars or less to be negative sentiment and the remaining reviews as positive sentiment. As you'll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that's great! I'm super happy so many people are enjoying their crocs as much as Grandma Louise. But...the shoe game is a competitive one, and if Crocs are going to remain at the top, they must continue to work on their flaws and improve. Therefore, the negative reviews are much more important than the positive ones. We will take steps in our model training to address the class imbalance issue, but the goal will remain the same throughout - build a classifier that can find the most important samples (the ones with negative sentiment) effectively.
+Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome previously-scraped [croc reviews data]({{< ref "review_scrape.md" >}}) is unfortunately not so awesome from a class balance standpoint. Soon, we'll assign binary class labels based on the rating a customer gave with their review where we'll consider ratings of 2 stars (out of 5) or less to be negative sentiment and the remaining reviews as positive sentiment. As you'll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that's great! 
+
+However, I don't believe Crocs reached the top of the shoe game by mistake. I'd be willing to bet the creators behind Crocs are more than willing to confront their flaws and improve upon them. Let's pretend the good people behind Crocs have asked us to build an ML model to catch the rare negative review for their product.
 
 ### Quick Note on Positive / Negative Lingo
 Traditionally, the positive class in a binary labeled dataset is the minority class of most interest / importance, and that will hold true in this project. Apologies for any confusion, but going forward when I reference the positive class, I will be referencing the set of negative sentiment reviews.
@@ -197,12 +199,12 @@ There are a lot of ways to address the imbalanced data problem when training a c
 
 
 ## Step 1: Implement Multiple Resampling Methods
-Thank goodness for the Imbalanced-learn library because it makes data resampling much easier. The term *resampling* refers to the practice of balancing data by either selecting a subset of the majority class equal in size to the minority class (known as under-sampling) or making the minority class as large as the majority (known as over-sampling). There are many different techniques for doing these processes, but we'll try out the following:
+Thank goodness for the Imbalanced-Learn library because it makes data resampling much easier. The term *resampling* refers to the practice of balancing data by either selecting a subset of the majority class equal in size to the minority class (known as under-sampling) or artificially making the minority class as large as the majority (known as over-sampling). There are many different techniques for doing these processes, but we'll try out the following:
 
 * **Random Over-sampling** - Randomly selects samples from the minority class and replaces them in the dataset.
 * **Random Under-sampling** - Randomly selects and removes samples from the majority class.
-* **SMOTE Over-sampling** - Synthetic Minority Over-sampling Technique generates new samples for the minority class by imitating its features. The original paper explaining the technique can be found [here](https://arxiv.org/abs/1106.1813).
-* **Cluster Under-sampling** - Under samples the majority class by replacing a cluster of majority samples by the cluster centroid of a KMeans algorithm.
+* **SMOTE Over-sampling** - Synthetic Minority Over-sampling Technique (SMOTE) generates new samples for the minority class by imitating its features. The original paper explaining the technique can be found [here](https://arxiv.org/abs/1106.1813).
+* **Cluster Under-sampling** - Under-samples the majority class by replacing a cluster of majority samples by the cluster centroid of a KMeans algorithm.
 
 
 ```python
@@ -255,14 +257,14 @@ df_train, df_test = train_test_split(vect_df, test_size = .1, random_state = 0)
 y_train, y_test = df_train['label'].tolist(), df_test['label'].tolist()
 X_train, X_test = df_train.drop(['label'], axis = 1), df_test.drop(['label'], axis = 1)
 
-print('Test Set Class Balance: ' + show_imb(y_test))
+print('Holdout Test Set Class Balance: ' + show_imb(y_test))
 ```
 
-    Test Set Class Balance: 872 Negative Samples | 52 Positive Samples
+    Holdout Test Set Class Balance: 872 Negative Samples | 52 Positive Samples
 
 
 ## Step 2: Train Multiple Baseline Classifiers Using Resampling Methods
-Let's alter our training data using each of the resampling methods and train with it. We'll also train using the unsampled original training data to act as a baseline.
+Let's alter our training data using each of the resampling methods and train using each one. We'll also train using the unsampled original training data as a baseline.
 
 
 ```python
@@ -285,6 +287,7 @@ for s in sampled_data_dict.keys():
     Class Balance with cluster_undersample:     547 Negative Samples | 547 Positive Samples
 
 
+As you can see, all the resampled training sets are now balanced except for the basline with no resampling. Let's train some baseline classifiers with each resampling method and view the results.
 
 ```python
 from tqdm.notebook import tqdm
@@ -306,7 +309,7 @@ for m in tqdm(models_dict.keys()):
     # Fit model on resampled data
     model = models_dict[m].fit(sampled_data_dict[d]['X_train'], sampled_data_dict[d]['y_train'])
 
-    # Predict on unaltered test set
+    # Predict on holdout test set
     preds = model.predict(X_test)
 
     # Add test results to dataframe
@@ -645,7 +648,7 @@ show_confusion(y_test, best_grid_model.predict(X_test))
     
 
 
-So, this is bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we needed to attempt to let no positive samples to slip past our classifier? This is where the fourth and final step could come in, altering the decision threshold of the model.
+This is bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we attempted to let no positive samples to slip past our classifier? This is where the fourth step can come in, altering the decision threshold of the model.
 
 ## Step 4: Altering the Decision Threshold
 Unfortunately, boosting the recall of our model will come at a cost.
