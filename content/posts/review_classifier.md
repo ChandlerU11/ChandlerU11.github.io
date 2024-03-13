@@ -7,6 +7,7 @@ ShowToc: true
 TocOpen: true
 ---
 
+
 ## Class Imbalance and Problem Statement
 Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome previously-scraped [croc reviews data]({{< ref "review_scrape.md" >}}) is unfortunately not so awesome from a class balance standpoint. Soon, we'll assign binary class labels based on the rating a customer gave with their review where we'll consider ratings of 2 stars (out of 5) or less to be negative sentiment and the remaining reviews as positive sentiment. As you'll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that's great! 
 
