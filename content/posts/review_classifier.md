@@ -20,7 +20,6 @@ Traditionally, the positive class in a binary labeled dataset is the minority cl
 
 Below is a look at the class imbalance of our data.
 
-
 ```python
 import pandas as pd
 from collections import Counter
