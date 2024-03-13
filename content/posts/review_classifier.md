@@ -7,10 +7,10 @@ ShowToc: true
 TocOpen: true
 ---
 
-## Class Imbalance
+## Class Imbalance and Problem Statement
 Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome previously-scraped [croc reviews data]({{< ref "review_scrape.md" >}}) is unfortunately not so awesome from a class balance standpoint. Soon, we'll assign binary class labels based on the rating a customer gave with their review where we'll consider ratings of 2 stars (out of 5) or less to be negative sentiment and the remaining reviews as positive sentiment. As you'll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that's great! 
 
-However, I don't believe Crocs reached the top of the shoe game by mistake. I'd be willing to bet the creators behind Crocs are more than willing to confront their flaws and improve upon them. Let's pretend the good people behind Crocs have asked us to build an ML model to catch the rare negative review for their product.
+However, I don't believe Crocs reached the top of the shoe game by mistake. I'd be willing to bet the creators behind Crocs are more than willing to confront their flaws and improve upon them. Let's pretend the good people behind Crocs have asked us to build an ML model to effectively classify the rare negative review for their product despite the severe class imbalance. They don't mind a few misclassifications of the positive reviews here and there but would prefer there aren't a ton of these instances. 
 
 ### Quick Note on Positive / Negative Lingo
 Traditionally, the positive class in a binary labeled dataset is the minority class of most interest / importance, and that will hold true in this project. Apologies for any confusion, but going forward when I reference the positive class, I will be referencing the set of negative sentiment reviews.
@@ -31,7 +31,7 @@ df['label'] = [0 if each > 2 else 1 for each in df['rating']]
 sns.countplot(x = df['label'], hue = df['label'])
 print("Only", "{:.0%}".format(label_count[1] / (label_count[1] + label_count[0])), "of our data belongs to the positive class.")
 ```
-Only 6% of our data belongs to the positive class.
+    Only 6% of our data belongs to the positive class.
 ![png](/class_balance.png)
     
 
@@ -185,8 +185,8 @@ df
 ## Strategy: Performance Metrics and Dealing with Imbalanced Data
 Because we're dealing with imbalanced data and are most concerned with identifying the minority / positive class, we will focus on improving the recall score of our models on the test set. We will also watch F2 score, a modifed version of F1 score that increases the importance of recall in its calculation. Why F2 score? We are concerned with maximizing recall, but a model that predicts the minority class 100% of the time would achieve a perfect recall score. That doesn't help us very much, and F2 score will give us an understanding of how well the model can *differentiate* between the two classes along with how well the model can identify positive samples. Below are the formulas to calculate the performance metrics.
 
-- Recall - TP / (TP + FN)
-- Precision - TP / (TP + FP)
+- Recall - True Positive / (True Positive + False Negative)
+- Precision - True Positive / (True Positive + False Positive)
 - F2 Score - (5 * Precision * Recall) / (4 * Precision + Recall)
 
 
@@ -194,7 +194,7 @@ There are a lot of ways to address the imbalanced data problem when training a c
 1. Implement multiple methods for resampling the data
 2. Train multiple baseline models using each of the resampling methods to see which resampling / model combo performs the best out of the box based on F2 and recall score
 3. Use GridsearchCV to tune the best baseline model for recall score whilst continuing to use the best resampling technique
-4. Alter the decision threshold of the model to maximize recall score
+4. Alter the model's decision threshold to maximize recall score
 
 
 
@@ -204,7 +204,7 @@ Thank goodness for the Imbalanced-Learn library because it makes data resampling
 * **Random Over-sampling** - Randomly selects samples from the minority class and replaces them in the dataset.
 * **Random Under-sampling** - Randomly selects and removes samples from the majority class.
 * **SMOTE Over-sampling** - Synthetic Minority Over-sampling Technique (SMOTE) generates new samples for the minority class by imitating its features. The original paper explaining the technique can be found [here](https://arxiv.org/abs/1106.1813).
-* **Cluster Under-sampling** - Under-samples the majority class by replacing a cluster of majority samples by the cluster centroid of a KMeans algorithm.
+* **Cluster Under-sampling** - Under-samples the majority class by replacing a cluster of majority samples by the cluster centroid of a KMeans algorithm. Keeps N majority samples by fitting the KMeans algorithm with N clusters to the majority class and keeping the centroids. The original paper explaining the technique can be found [here](https://pdf.sciencedirectassets.com/271625/1-s2.0-S0020025517X00170/1-s2.0-S0020025517307235/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjECwaCXVzLWVhc3QtMSJHMEUCIQC47bRCWoWhx4j6dXe4DAUAWdSDDoet7OLFxgwHB7uAfgIgb3pt1u25LyN2tZusJtn2Yxk%2FKqPel%2F2Vti6NU1Owz64qswUINRAFGgwwNTkwMDM1NDY4NjUiDGNmcQlE3DCZtIhNGiqQBY6A5JS6LAtOqDyOvg4Vhben8nSOAewPv2FAGuOISVDZVmIt3OYVkmK7UZ1qJN9%2Fzv6%2BFO4G%2F464jqxxRarqICnAJLPdAkt3lPjqwC87UTmU3W3F2es59x0sQw56ruYP3BCGtBZH4tzgQa49COf5xt0DpydNMVrsrWB2u8LMajRV7YVDRuKIxLCzlRMi91TjOEXAbrDWhddvDT%2FeoWME4AoE3g%2BkSs0Xz6NljbajNeL%2BoDimhC8LFanY%2FgLLmWq6LpFC7nyvkqa9ZdFhEwWFWsA6Nv66adMa9LOm9DP9hRkOEqSpYlstUF0vteFtoWjfJBrVvSf4JTy1jNsUTwcNcHmCBlfgLuI57pZQ7FDxKAibMiTb8aHLBEepOHDKbslPMmRbLGMEsD8fTqc9bNIU70K9vbxcOg1Okuu42RYjUSnb5Vf3LgM8mnU7pvzUkyy47PiyqBRj2wlZycGLks4aduTR3Cewbl7p0CxHDU%2BTXTu7nqcC0W6NdMceiZCECVfP0%2FUxXOqxtdi4s15UzSKO9C%2FTu%2BMOOeV2Vy9h90ERHdEa5yN9ZizeESN33kbGxlz8c3HEufgfHicoGGhgSgiPoNmudweJONCd4ak6wnOhyB2o3MWlTYS0wJPfB9DTZGnfPq04sU%2FaBzNcQpbIFVRH6ne1i3W6kpAMDMA8iYNBogsSCWitXW%2F1SGYkQ0wAJopLxG8wRPvY%2Fxc0Mvs7Jl37nZvCOhZOf3OqE5i3mLQ2RUBbPIKjIcopdGkSHFLFepUBFcocXQQEJBusJci90KzPNQyHANvUVpH2DNS1milcvEQncbKRSB1dpo8zAwUNAyXtPPGneC5rOI5ru%2F%2BhQq3MPEoizmEDz4tWVOLeVZ2zEUTbMI%2B7va8GOrEBjt%2Bm8ryl%2FQ8hVgcyxitu9r7oI9EMMuu70tBqpdUULHm8pC%2FeEAjSI3xaX4uB5tX0wOSJoQ%2BB4P9I2bXGywVGMC3Q%2FBVvM7xFH9ZR3SUE2A6CZbrTCtHkLNnbTskXUM87CC%2BRrflJd8sFvcxA7jZHbph0MDOzypGXwJjpBogiiNXvlCUPw43IrfybKX5dvn9M8Y%2Bjo%2BQxqYGAI4ThhsFQBn3EVqnoiz8Kc5C9lDjhDVgJ&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240311T201637Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTYYXF3U3OZ%2F20240311%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=493c301e9e2a2e5606362ed4128cf03fca2a6a4895d39a12d5d0230352638373&hash=3e1692ea3b2683c14cc13a0ef73b1fbd600a61cd4b1153cbe8a5036385efdd16&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0020025517307235&tid=spdf-1028a5cd-4900-4631-8332-f58760d29c54&sid=b192a3b699e39243f42a7ed60f275680281bgxrqa&type=client&tsoh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&ua=0f175c53510255565004&rr=862e392c5bd508ef&cc=us)
 
 
 ```python
@@ -248,10 +248,12 @@ def show_imb(label):
   imb = Counter(label)
   return str(imb[0]) + ' Negative Samples | ' + str(imb[1]) + ' Positive Samples'
 
+# We'll be using TF-IDF for this project
 vectorizer = TfidfVectorizer()
 vect_df = pd.DataFrame(vectorizer.fit_transform(df['clean_review']).todense(), columns=vectorizer.get_feature_names_out())
 vect_df['label'] = df['label'].copy()
 
+# Train / test split
 df_train, df_test = train_test_split(vect_df, test_size = .1, random_state = 0)
 
 y_train, y_test = df_train['label'].tolist(), df_test['label'].tolist()
@@ -287,7 +289,7 @@ for s in sampled_data_dict.keys():
     Class Balance with cluster_undersample:     547 Negative Samples | 547 Positive Samples
 
 
-As you can see, all the resampled training sets are now balanced except for the basline with no resampling. Let's train some baseline classifiers with each resampling method and view the results.
+As you can see, all the resampled training sets are now balanced except for the basline with no resampling. Let's train some baseline classifiers with each resampling method and view the results on the unaltered test set.
 
 ```python
 from tqdm.notebook import tqdm
@@ -303,7 +305,7 @@ models_dict = {'Naive Bayes':         GaussianNB(),
 # Dataframe to view test results
 results_df = pd.DataFrame(columns = ['model_name', 'sampling_type', 'model', 'fbeta', 'recall'])
 
-# Iterate over all models and all sampling techniques
+# Iterate over all models and all resampling techniques
 for m in tqdm(models_dict.keys()):
   for d in tqdm(sampled_data_dict.keys()):
     # Fit model on resampled data
@@ -480,8 +482,8 @@ show_confusion(y_test, best_baseline_model.predict(X_test))
 
 We're already in a really good spot as we are correctly identifying the positive class over 96% of the time. We have more false positives than I'd like, but maybe some hyperparameter tuning can help here.
 
-## Step 3: Finding Best Hyperparams with Grid Search
-For finding the best logistic regression hyperparams, we will use Scikit-Learn's GridSearchCV in combination with an Imblearn Pipeline. GridsearchCV performs an exhaustive search over the provided parameters and performs cross-validation for every parameter combination. Imblearn's Pipeline allows us to perform the same resampling technique we chose in step two with grid search. The pipeline will resample the training data using cluster undersampling but will not touch the balance of the test data of the fold. We'll setup GridsearchCV to optimize for recall score and have it return the model that performed the best in terms of average recall across all folds.  
+## Step 3: Finding Best Hyperparams with GridsearchCV
+For finding the best logistic regression hyperparams, we will use Scikit-Learn's GridSearchCV in combination with an Imblearn Pipeline. GridsearchCV performs an exhaustive search over the provided parameters and performs cross-validation for every parameter combination. Imblearn's Pipeline allows us to perform the same resampling technique we chose in step two with GridsearchCV. The pipeline will resample the training data using cluster undersampling but will not touch the balance of the test data in the fold. We'll setup GridsearchCV to optimize for recall score and have it return the model that performed the best in terms of average recall across all folds.  
 
 
 ```python
@@ -651,30 +653,37 @@ show_confusion(y_test, best_grid_model.predict(X_test))
 This is bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we attempted to let no positive samples to slip past our classifier? This is where the fourth step can come in, altering the decision threshold of the model.
 
 ## Step 4: Altering the Decision Threshold
-Unfortunately, boosting the recall of our model will come at a cost.
-
+Altering the decision threshold will allow us to catch more true positive samples by increasing the *sensitivity* of the model. This increase in sensitivity will come at a cost, however, causing a decrease in the precision of our model. But, that's ok! We are most concerned with catching the true positives in this data and aren't nearly as worried about false positives. Below is a look our model's precision-recall curve to get a better understanding of the tradeoff between the two measures prior to changing the decision threshold.
 
 ```python
 from sklearn.metrics import precision_recall_curve
+
+# Get class probability scores
 y_scores = best_grid_model.predict_proba(X_test)[:, 1]
+
+# Returns precision-recall pairs for different probability thresholds
 p, r, thresholds = precision_recall_curve(y_test, y_scores)
+
 viz_df = pd.DataFrame({'Precision':p, 'Recall':r})
 sns.lineplot(data = viz_df, x = "Recall", y = "Precision")
 ```
   
 ![png](/pr_curve.png)
     
-
+For us to achieve perfect recall, the model's precision is going to suffer quite a bit. Again, that's OK becuase of this project's main goal to effectively catch positive samples. Let's iteratively lower the decision threshold until we achieve perfect recall. 
 
 
 ```python
 def adjusted_classes(y_scores, t):
+    # If pred probability is greater than or equal to threshold it is positive
     return [1 if y >= t else 0 for y in y_scores]
 
+# Default sklearn logistic regression threshold
 init_threshold = 0.5
 pred = adjusted_classes(y_scores, init_threshold)
 recall = recall_score(y_test, pred)
 
+# Stops when recall is perfect
 while recall != 1.0:
   init_threshold = init_threshold - 0.001
   pred = adjusted_classes(y_scores, init_threshold)
@@ -687,3 +696,5 @@ show_confusion(y_test, pred)
     Maximum Threshold for Perfect Recall:  0.3679999999999999
     
 ![png](/perfect_recall_cf.png)
+
+There you have it - a very sensitive model that doesn't always spit out the positive class!
