@@ -29,7 +29,7 @@ Before we start scraping, we need to do some research, meaning that we need to g
 First, we need to figure out how to traverse the pages of reviews on Zappos.com. I went and clicked through the review pages and paid close attention to the URL. I noticed that it explicitly changes with each page. For example, https://www.zappos.com/product/review/7153812/page/1/orderBy/best takes you to the first page, and https://www.zappos.com/product/review/7153812/page/2/orderBy/best takes you to the second page. Easy. To traverse the pages, all we need to do is change a single character in the URL. 
 
 # Some Code to Download Whole Webpages
-I prefer to download whole webpages and extract data from them later. Why? Because comapnies oftentimes aren't super happy about you scraping their data, and you have to be carefull about how your traffic looks as you surf pages. Manners are important! Extracting data from HTML is a messy process that requires developement, and you don't want to risk having to rerun your scraper becuase you forgot to write the Beatiful Soup code to extract a product's rating, for example. A script to traverse and download Zappos review pages is below.
+I prefer to download whole webpages and extract data from them later. Why? Because comapnies oftentimes aren't super happy about you scraping their data, and you have to be carefull about how your traffic looks as you surf pages. Manners are important! Extracting data from HTML is a messy process that requires development, and you don't want to risk having to rerun your scraper because you forgot to write the Beautiful Soup code to extract a product's rating, for example. A script to traverse and download Zappos review pages is below.
 
 ```python
 from bs4 import BeautifulSoup
