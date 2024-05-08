@@ -58,7 +58,6 @@ params:
   # disableThemeToggle: true
   ShowShareButtons: false
   ShowReadingTime: true
-  post-description: true
   # disableSpecial1stPost: true
   displayFullLangName: true
   ShowPostNavLinks: true
@@ -73,8 +72,8 @@ params:
 
   profileMode:
     enabled: True
-    title: Hello from Chandler
-    subtitle: Welcome to my portfolio. I'm a machine learning engineer / data scientist with strong interest and experience in natural language processing, reinforcement learning, and generative AI. In my most recent role as a professional researcher at Boise State University, I used reinforcement learning techniques to fine-tune large language models as adversaries for attacking misinformation classification systems. I love all things data and machine learning, and I hope you enjoy your time here!
+    title: Chandler's Portfolio
+    subtitle: Welcome! I'm a machine learning engineer / data scientist with strong interest and experience in natural language processing and generative AI. I have a masters in computer science, and I most recently worked as a researcher at Boise State University, using machine learning to build online misinformation detection systems and training generative AIs to attack those systems. I'm currently on the hunt for Software Engineer roles and roles that fall under the Data Science \"umbrella\". Thanks for visiting, and I hope you enjoy your time here.
     imageUrl: "screenshot.png"
     imageTitle: image
     imageWidth: 240
