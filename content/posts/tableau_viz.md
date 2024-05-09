@@ -7,6 +7,23 @@ ShowToc: true
 TocOpen: true
 ---
 
+{{< rawhtml >}}
+<!DOCTYPE html>
+<html>
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0NTZD30YVX');
+</script>
+</head>
+</html>
+{{< /rawhtml >}}
+
+
 # About
 This post contains the dashboard I built to go along with my [data cleaning project]({{< ref "clean_data.md" >}}) where I clean up my own running data from college. Shoutout to Andy Kriebel and his awesome YouTube [video](https://www.youtube.com/watch?v=EZMLjMaZYSs&t=308s) for getting me started! 
 

@@ -3,6 +3,7 @@ title: About
 date: 2023-08-21
 author: Chandler
 ---
+
 {{< rawhtml >}}
 <!DOCTYPE html>
 <html>
@@ -18,6 +19,7 @@ author: Chandler
 </head>
 </html>
 {{< /rawhtml >}}
+
 ---
 # Education
 
