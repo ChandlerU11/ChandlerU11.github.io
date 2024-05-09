@@ -3,7 +3,21 @@ title: About
 date: 2023-08-21
 author: Chandler
 ---
+{{< rawhtml >}}
+<!DOCTYPE html>
+<html>
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'G-0NTZD30YVX');
+</head>
+</html>
+</script>
+{{< /rawhtml >}}
 ---
 # Education
 
