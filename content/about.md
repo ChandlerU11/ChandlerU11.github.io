@@ -14,9 +14,9 @@ author: Chandler
   gtag('js', new Date());
 
   gtag('config', 'G-0NTZD30YVX');
+</script>
 </head>
 </html>
-</script>
 {{< /rawhtml >}}
 ---
 # Education
