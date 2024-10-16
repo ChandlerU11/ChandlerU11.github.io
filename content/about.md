@@ -1,7 +1,7 @@
 ---
 title: About
 date: 2023-08-21
-author: Chandler
+author: Chandler Underwood
 ---
 
 {{< rawhtml >}}
