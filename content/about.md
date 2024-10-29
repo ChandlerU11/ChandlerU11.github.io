@@ -46,8 +46,12 @@ author: Chandler Underwood
 ---
 # Experience
 
+## Blue Cross of Idaho
+*Healthcare Data Analyst* | June 2024 - Present
+- *Technologies*: SQL, Python, Pandas
+
 ## Boise State University
-*Machine Learning Research Associate* | August 2023 - Present
+*Machine Learning Research Associate* | September 2023 - January 2024
 
 *Machine Learning Graduate Research Assistant* | August 2022 – August 2023
 - Implemented machine learning models to spot online misinformation, achieving over 90% accuracy scores.

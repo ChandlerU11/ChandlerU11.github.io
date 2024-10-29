@@ -73,7 +73,7 @@ params:
   profileMode:
     enabled: True
     title: Chandler's Portfolio
-    #subtitle: Welcome! I'm a machine learning engineer / data scientist with strong interest and experience in natural language processing and generative AI. I have a masters in computer science, and I most recently worked as a researcher at Boise State University, using machine learning to build online misinformation detection systems and training generative AIs to attack those systems. I'm currently on the hunt for Software Engineer roles and roles that fall under the Data Science \"umbrella\". Thanks for visiting, and I hope you enjoy your time here.
+    subtitle: Welcome! I'm glad you're here. This portfolio showcases my work in data science, where I combine data analysis, machine learning, and visualization to solve complex problems and drive insights. I hope you enjoy browsing through my work—please reach out if you'd like to connect!
     imageUrl: "IMG_0255.JPG"
     imageTitle: image
     imageWidth: 365
