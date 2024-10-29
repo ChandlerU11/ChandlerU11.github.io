@@ -40,7 +40,7 @@ author: Chandler Underwood
   - Data Structures and Algorithms
   - Linear Algebra
   - Object-Oriented Programming
-  - Statistal Inference and Probability
+  - Statistical Inference and Probability
 
 
 ---
@@ -72,3 +72,4 @@ author: Chandler Underwood
 - Translated daily-run queries for use with data warehouse and visualization software.
 - Created visualizations and daily reports to provide stakeholders with actionable insights.
 - *Technologies*: SQL, Cognos Analytics, Python
+
