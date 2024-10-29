@@ -440,5 +440,3 @@ find_most_typical(df, 'fit', 'negative', 'count')
         
 # Conclusion
 Well that was fun! After going through and reading the model outputs, it seems that CountVectorizer works the best for solving this problem. Which makes sense considering we are most concerned with finding the most "typical" reviews, and CountVectorizer focuses solely on term frequency to represent documents. Using CountVectorizer seems partial to the selection of shorter reviews, which I would consider an advantage in this space. Quick and succinct is the name of the game here. I really like this idea and may deploy a model based on this concept in the future...
-
-

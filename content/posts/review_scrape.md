@@ -242,4 +242,3 @@ plt.show()
 ![png](/wordcloud.png)
     
 "Croc" and "Love" seem to go together a lot. Why am I not surprised? :) I'm excited to see what I can do with this data in the future! Again, here's the [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you'd like.
-
