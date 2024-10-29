@@ -25,7 +25,7 @@ TocOpen: true
 
 
 ## Introduction
-For those of you that don't know me personally, I managed to run collegiately for 6 years (thanks Covid?). Over that time I logged a lot of miles and a lot Garmin activities. I still run quite a bit, but my barn burning days are behind me. I'd like to build a dashboard to get some insights to my running trends during that time as a sort of "last hoorah", but sadly, a lot of my running data is missing and messy. I think cleaning it up will make for a great project to test my skills! Follow along here as I clean up and fill-in my running data using various techniques such as pulling outside data sources and training some ML models to predict missing values.
+For those of you that don't know me personally, I managed to run collegiately for 6 years (thanks Covid?). Over that time I logged a lot of miles and a lot of Garmin activities. I still run quite a bit, but my barn burning days are behind me. I'd like to build a dashboard to get some insights to my running trends during that time as a sort of "last hoorah", but sadly, a lot of my running data is missing and messy. I think cleaning it up will make for a great project to test my skills! Follow along here as I clean up and fill-in my running data using various techniques such as pulling outside data sources and training some ML models to predict missing values.
 
 ## Data Read-in and Initial Exploration
 Below is a first look at my running data from college. Over the span of 6 years, I went for a run at least 1,975 times! 
@@ -399,13 +399,13 @@ The first issue with this dataset is that the *Avg HR* and *Max HR* columns are 
 
 ## Data Cleaning and Feature Engineering
 
-First thing we need to do is drop those extrenious columns and correct the datatypes for our remaining columns. 
+First thing we need to do is drop those extraneous columns and correct the data types for our remaining columns. 
 
 
 ```python
 import numpy as np
 
-#Drop extranious columns
+#Drop extraneous columns
 cols_to_keep = ['Date', 'Title', 'Time', 'Avg Pace', 'Best Pace', 'Distance',
        'Calories', 'Avg HR', 'Max HR', 'Avg Run Cadence',
        'Max Run Cadence', 'Total Ascent',
@@ -481,14 +481,14 @@ df.info()
     memory usage: 279.5+ KB
     
 
-Over half of the values in the *Avg HR*, *Max HR*, *Min Temp* and *Max Temp* columns are NULL. Remember, I'm doing this, so I can get a better understanding of trends in my running data over the years I ran in college. I wan't to create some visualizations with this data in the future, and all these values are important in getting a "big picture" look at my runnning trends. To deal with the missing data, we have four options: 
+Over half of the values in the *Avg HR*, *Max HR*, *Min Temp* and *Max Temp* columns are NULL. Remember, I'm doing this, so I can get a better understanding of trends in my running data over the years I ran in college. I want to create some visualizations with this data in the future, and all these values are important in getting a "big picture" look at my running trends. To deal with the missing data, we have four options: 
 
 1. Drop the rows that are missing data. 
 2. Fill NULL rows with some sort of common value (oftentimes the median of the column in question).
 3. Bring in an outside data source.
 4. Create a predictive model. 
 
-Option 1 is not going to work here as that would eliminate nearly two thirds of my data. Option 2 works OK for the columns that are missing only a few features, but it would definitely take away from the richness of the data and make for some boring / unhelpful visualizations if we used it for all the missing values in the dataset. But, option 3 can work great for filling in the tempurature data as it is easy to find weather data, and option 4 is the way to go for fixing the HR data.
+Option 1 is not going to work here as that would eliminate nearly two thirds of my data. Option 2 works OK for the columns that are missing only a few features, but it would definitely take away from the richness of the data and make for some boring / unhelpful visualizations if we used it for all the missing values in the dataset. But, option 3 can work great for filling in the temperature data as it is easy to find weather data, and option 4 is the way to go for fixing the HR data.
 
 
 ```python
@@ -499,7 +499,7 @@ df[cols_with_few_nan] = df[cols_with_few_nan].fillna(df[cols_with_few_nan].media
 
 ## Bringing in Some Outside Help
 
-Unfortunately, Garmin uses a somewhat cryptic system to log the location of runs. It usually titles each activity as either the county or city name plus "Running" with no other geolocation data to go along with it. To help us get started, let's look at where my runs occured that are missing tempurature data.
+Unfortunately, Garmin uses a somewhat cryptic system to log the location of runs. It usually titles each activity as either the county or city name plus "Running" with no other geolocation data to go along with it. To help us get started, let's look at where my runs occurred that are missing temperature data.
 
 
 ```python
@@ -540,18 +540,18 @@ df_weather['Max Temp'] = df_weather['TMAX']
 #Dataset contains weather reports from several locations surrounding Starkville, so we can group them together. 
 df_weather = df_weather[['Date', 'Min Temp', 'Max Temp']].groupby(by = ['Date']).mean()
 
-#Perform inner join, giving us a 1:1 ratio of dates to tempuratures
+#Perform inner join, giving us a 1:1 ratio of dates to temperatures
 df = df.drop(columns = ['Min Temp', 'Max Temp']).merge(df_weather, on = 'Date', how = 'inner')
 
-#Infill any remaining missing tempurature values with the median
+#Infill any remaining missing temperature values with the median
 cols_with_few_nan = ['Min Temp', 'Max Temp']
 df[cols_with_few_nan] = df[cols_with_few_nan].fillna(df[cols_with_few_nan].median())
 ```
 
-There you have it, our filled in tempurature data. Now, we need to build a model(s) that can effectively populate the missing values in our Max HR and Avg HR columns.
+There you have it, our filled in temperature data. Now, we need to build a model(s) that can effectively populate the missing values in our Max HR and Avg HR columns.
 
 ## Fitting a model to fill-in our missing data
-Let's train and evaluate some regression models to fill in all that missing heart rate data. In the end we will have built two models, one to predict the *Avg HR* columns and another to predict *Max HR*.
+Let's train and evaluate some regression models to fill in all that missing heart rate data. In the end we will have built two models, one to predict the *Avg HR* columns and another to predict *Max HR*. 
 
 
 ```python
@@ -569,7 +569,7 @@ y_avg = df_train['Avg HR']
 y_max = df_train['Max HR']
 ```
 
-Becuase of my running domain knowledge, I have an idea of what features will be usefull for predicting the *Max HR* and *Avg HR* columns of our data, but I'm a fan of letting scikit-learn decide what features are best for me. Let's select the best 5 features. 
+Because of my running domain knowledge, I have an idea of what features will be useful for predicting the *Max HR* and *Avg HR* columns of our data, but I'm a fan of letting scikit-learn decide what features are best for me. Let's select the best 5 features. 
 
 
 ```python
@@ -598,7 +598,7 @@ def cv(model, X, y, model_name):
     score = cross_validate(model, X, y, cv=5, scoring=('neg_mean_absolute_error', 'neg_mean_squared_error'))
     print("\nModel: ", model_name)
     print("Test Mean Absolute Error: ", statistics.mean(score['test_neg_mean_absolute_error']), 
-          "\nTest Mean Sqaured Error: ", statistics.mean(score['test_neg_mean_squared_error']))
+          "\nTest Mean Squared Error: ", statistics.mean(score['test_neg_mean_squared_error']))
 
 lasso = Lasso(alpha = 0.1)
 reg = LinearRegression()
@@ -618,38 +618,38 @@ for data in data_list:
     
     Model:  Lasso Regression
     Test Mean Absolute Error:  -3.4721680220384203 
-    Test Mean Sqaured Error:  -21.528693269323934
+    Test Mean Squared Error:  -21.528693269323934
     
     Model:  Linear Regression
     Test Mean Absolute Error:  -3.4965374931940674 
-    Test Mean Sqaured Error:  -21.794449648893643
+    Test Mean Squared Error:  -21.794449648893643
     
     Model:  SVR
     Test Mean Absolute Error:  -6.503686070502235 
-    Test Mean Sqaured Error:  -64.17778768337854
+    Test Mean Squared Error:  -64.17778768337854
     
     Model:  RF Regressor
     Test Mean Absolute Error:  -3.6666079473371216 
-    Test Mean Sqaured Error:  -22.542642038967205
+    Test Mean Squared Error:  -22.542642038967205
     
     ############################
      HR Max
     
     Model:  Lasso Regression
     Test Mean Absolute Error:  -6.310069863144789 
-    Test Mean Sqaured Error:  -67.01035553775584
+    Test Mean Squared Error:  -67.01035553775584
     
     Model:  Linear Regression
     Test Mean Absolute Error:  -6.332889188711009 
-    Test Mean Sqaured Error:  -67.28914455377931
+    Test Mean Squared Error:  -67.28914455377931
     
     Model:  SVR
     Test Mean Absolute Error:  -7.571264852476413 
-    Test Mean Sqaured Error:  -91.18257365781352
+    Test Mean Squared Error:  -91.18257365781352
     
     Model:  RF Regressor
     Test Mean Absolute Error:  -5.748229756457544 
-    Test Mean Sqaured Error:  -57.09265923926437
+    Test Mean Squared Error:  -57.09265923926437
     
 
 Lasso regression is the best model for predicting the Average Heart Rate of my runs while Random Forest Regressor is the best at predicting the Max Heart Rate. 
@@ -944,4 +944,5 @@ df
 
 {{< /rawhtml >}}
 
-There you have it, a NULL-free, clean dataset. We are dashboard ready now. Check out my next post to see what I can make with this in Tablaeu. 
+There you have it, a NULL-free, clean dataset. We are dashboard ready now. Check out my next post to see what I can make with this in Tableau.
+

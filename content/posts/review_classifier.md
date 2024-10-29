@@ -200,7 +200,7 @@ df
 
 
 ## Strategy: Performance Metrics and Dealing with Imbalanced Data
-Because we're dealing with imbalanced data and are most concerned with identifying the minority / positive class, we will focus on improving the recall score of our models on the test set. We will also watch F2 score, a modifed version of F1 score that increases the importance of recall in its calculation. Why F2 score? We are concerned with maximizing recall, but a model that predicts the minority class 100% of the time would achieve a perfect recall score. That doesn't help us very much, and F2 score will give us an understanding of how well the model can *differentiate* between the two classes along with how well the model can identify positive samples. Below are the formulas to calculate the performance metrics.
+Because we're dealing with imbalanced data and are most concerned with identifying the minority / positive class, we will focus on improving the recall score of our models on the test set. We will also watch F2 score, a modified version of F1 score that increases the importance of recall in its calculation. Why F2 score? We are concerned with maximizing recall, but a model that predicts the minority class 100% of the time would achieve a perfect recall score. That doesn't help us very much, and F2 score will give us an understanding of how well the model can *differentiate* between the two classes along with how well the model can identify positive samples. Below are the formulas to calculate the performance metrics.
 
 - Recall - True Positive / (True Positive + False Negative)
 - Precision - True Positive / (True Positive + False Positive)
@@ -500,7 +500,7 @@ show_confusion(y_test, best_baseline_model.predict(X_test))
 We're already in a really good spot as we are correctly identifying the positive class over 96% of the time. We have more false positives than I'd like, but maybe some hyperparameter tuning can help here.
 
 ## Step 3: Finding Best Hyperparams with GridsearchCV
-For finding the best logistic regression hyperparams, we will use Scikit-Learn's GridSearchCV in combination with an Imblearn Pipeline. GridsearchCV performs an exhaustive search over the provided parameters and performs cross-validation for every parameter combination. Imblearn's Pipeline allows us to perform the same resampling technique we chose in step two with GridsearchCV. The pipeline will resample the training data using cluster undersampling but will not touch the balance of the test data in the fold. We'll setup GridsearchCV to optimize for recall score and have it return the model that performed the best in terms of average recall across all folds.  
+For finding the best logistic regression hyperparams, we will use Scikit-Learn's GridSearchCV in combination with an Imblearn Pipeline. GridsearchCV performs an exhaustive search over the provided parameters and performs cross-validation for every parameter combination. Imblearn's Pipeline allows us to perform the same resampling technique we chose in step two with GridsearchCV. The pipeline will resample the training data using cluster undersampling but will not touch the balance of the test data in the fold. We'll set up GridsearchCV to optimize for recall score and have it return the model that performed the best in terms of average recall across all folds.  
 
 
 ```python
@@ -666,11 +666,10 @@ show_confusion(y_test, best_grid_model.predict(X_test))
 ![png](/hyperparam_cf.png)
     
 
-
-This is bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we attempted to let no positive samples to slip past our classifier? This is where the fourth step can come in, altering the decision threshold of the model.
+This is a bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we attempted to let no positive samples slip past our classifier? This is where the fourth step can come in, altering the decision threshold of the model.
 
 ## Step 4: Altering the Decision Threshold
-Altering the decision threshold will allow us to catch more true positive samples by increasing the *sensitivity* of the model. This increase in sensitivity will come at a cost, however, causing a decrease in the precision of our model. But, that's ok! We are most concerned with catching the true positives in this data and aren't nearly as worried about false positives. Below is a look our model's precision-recall curve to get a better understanding of the tradeoff between the two measures prior to changing the decision threshold.
+Altering the decision threshold will allow us to catch more true positive samples by increasing the *sensitivity* of the model. This increase in sensitivity will come at a cost, however, causing a decrease in the precision of our model. But, that's ok! We are most concerned with catching the true positives in this data and aren't nearly as worried about false positives. Below is a look at our model's precision-recall curve to get a better understanding of the tradeoff between the two measures prior to changing the decision threshold.
 
 ```python
 from sklearn.metrics import precision_recall_curve
@@ -687,7 +686,9 @@ sns.lineplot(data = viz_df, x = "Recall", y = "Precision")
   
 ![png](/pr_curve.png)
     
-For us to achieve perfect recall, the model's precision is going to suffer quite a bit. Again, that's OK becuase of this project's main goal to effectively catch positive samples. Let's iteratively lower the decision threshold until we achieve perfect recall. 
+
+For us to achieve perfect recall, the model's precision is going to suffer quite a bit. Again, that's OK because of this project's main goal to effectively catch positive samples. Let's iteratively lower the decision threshold until we achieve perfect recall. 
+
 
 
 ```python

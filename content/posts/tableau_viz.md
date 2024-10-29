@@ -27,7 +27,7 @@ TocOpen: true
 # About
 This post contains the dashboard I built to go along with my [data cleaning project]({{< ref "clean_data.md" >}}) where I clean up my own running data from college. Shoutout to Andy Kriebel and his awesome YouTube [video](https://www.youtube.com/watch?v=EZMLjMaZYSs&t=308s) for getting me started! 
 
-The dashboard allows for dynamic exploration of the time series data from years down to days. I would recomend opening up the visualization to full screen, so you can see the "timeframe snapshots" along with my most important running stats.
+The dashboard allows for dynamic exploration of the time series data from years down to days. I would recommend opening up the visualization to full screen, so you can see the "timeframe snapshots" along with my most important running stats.
 
 
 # The Dashboard
@@ -40,3 +40,4 @@ The dashboard allows for dynamic exploration of the time series data from years 
 </html>
 
 {{< /rawhtml >}}
+

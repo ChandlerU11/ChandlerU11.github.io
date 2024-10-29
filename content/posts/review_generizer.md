@@ -199,7 +199,7 @@ df
 # Some Notes on Vectorization Methods
 Since it's been decided we're using *k*-means for this project, we're going to try out two vectorization methods and compare their performance. For each of our vectorization methods, we'll also compute an example of their output using the two phrases "going to the store to buy bananas" and "we buy bananas" here. The vectorizers are the following:
 
-- **TF-IDF** - term frequency-inverse document frequency helps by giving us an understanding of how important a word is within a document relative to an entire corpus. It is calculated by multplying a word's term frequency (TF) with its inverse document frequency (IDF). 
+- **TF-IDF** - term frequency-inverse document frequency helps by giving us an understanding of how important a word is within a document relative to an entire corpus. It is calculated by multiplying a word's term frequency (TF) with its inverse document frequency (IDF). 
 
 ``` 
 TF = # of times word appears in a document / total # of terms in document
@@ -289,7 +289,7 @@ def find_most_typical(df, word, rating, vect, asc = True):
         print('# ', each)
 ```
 
-# Psuedo-evaluation
+# Pseudo-evaluation
 We don't really have a way to evaluate this model, so we're going to have to use some intuition! Firstly, let's look at what the 3 most typical positive reviews that mention "crocs" using TF-IDF and CountVectorizer would say.
 
 ```python
@@ -440,3 +440,5 @@ find_most_typical(df, 'fit', 'negative', 'count')
         
 # Conclusion
 Well that was fun! After going through and reading the model outputs, it seems that CountVectorizer works the best for solving this problem. Which makes sense considering we are most concerned with finding the most "typical" reviews, and CountVectorizer focuses solely on term frequency to represent documents. Using CountVectorizer seems partial to the selection of shorter reviews, which I would consider an advantage in this space. Quick and succinct is the name of the game here. I really like this idea and may deploy a model based on this concept in the future...
+
+

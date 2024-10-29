@@ -29,7 +29,7 @@ Before we get into things, here's a [link](https://www.kaggle.com/datasets/chand
 
 Do you ever find yourself pouring over a product's reviews trying to decide if it's right for you? I sure do. Many of these times I've wished there was a quick summary of the reviews I could read to speed up the decision process. I've yet to see any online retailers doing exactly what I'm looking for, so I've decided to make my own review summarizer. But, we need some data for training such a tool.
 
-For this project I wanted to use data that was fun, interesting, and maybe even a little contraversial... After much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, I'm talking about the clunky rubber footwear my grandmother wears while gardening that some fashionistas would consider an abomination. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset containing reviews for Crocs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can train a review summarizer for the most loved and hated shoes on the planet! 
+For this project I wanted to use data that was fun, interesting, and maybe even a little controversial... After much thought and deliberation over what product reviews to train a summary generator on, I landed on Crocs. Yes, I'm talking about the clunky rubber footwear my grandmother wears while gardening that some fashionistas would consider an abomination. What's more fun than that??? Maybe or maybe not to your surprise, I searched the internet for a dataset containing reviews for Crocs to no avail. So, we're going to have to find our own data. Follow along as I build a webscraper to farm reviews for Crocs Classic Clog, so we can train a review summarizer for the most loved and hated shoes on the planet! 
 
 # What tools can we use? 
 There are several Python libraries that are helpful for webscraping:
@@ -46,7 +46,7 @@ Before we start scraping, we need to do some research, meaning that we need to g
 First, we need to figure out how to traverse the pages of reviews on Zappos.com. I went and clicked through the review pages and paid close attention to the URL. I noticed that it explicitly changes with each page. For example, https://www.zappos.com/product/review/7153812/page/1/orderBy/best takes you to the first page, and https://www.zappos.com/product/review/7153812/page/2/orderBy/best takes you to the second page. Easy. To traverse the pages, all we need to do is change a single character in the URL. 
 
 # Some Code to Download Whole Webpages
-I prefer to download whole webpages and extract data from them later. Why? Because companies oftentimes aren't super happy about you scraping their data, and you have to be careful about how your traffic looks as you surf pages. Manners are important! Extracting data from HTML is a messy process that requires development, and you don't want to risk having to rerun your scraper because you forgot to write the Beautiful Soup code to extract a product's rating, for example. A script to traverse and download Zappos review pages is below.
+I prefer to download whole web pages and extract data from them later. Why? Because companies oftentimes aren't super happy about you scraping their data, and you have to be careful about how your traffic looks as you surf pages. Manners are important! Extracting data from HTML is a messy process that requires development, and you don't want to risk having to rerun your scraper because you forgot to write the Beautiful Soup code to extract a product's rating, for example. A script to traverse and download Zappos review pages is below.
 
 ```python
 from bs4 import BeautifulSoup
@@ -69,7 +69,7 @@ def html_code(url):
 
 text = "https://www.zappos.com/product/review/7153812/page/{insert}/orderBy/best"
 
-#Iterate over all posible URLs
+#Iterate over all possible URLs
 for i in range(1, 1000):
     #Retrieve HTML
 	print("Scraping: " + text.format(insert = str(i)))
@@ -85,10 +85,10 @@ for i in range(1, 1000):
 ```
 
 # Extracting Data from Webpages
-Now that we've downloaded the pages of reviews, we need to figure out how to extract the text from the HTML in a useful format. Google Chrome's page inspect tool is great here as it allows us to click on items within the webpage and find their respective HTML tagnames. 
+Now that we've downloaded the pages of reviews, we need to figure out how to extract the text from the HTML in a useful format. Google Chrome's page inspect tool is great here as it allows us to click on items within the webpage and find their respective HTML tag names. 
 ![Scenario 1: Across columns](/Zappos_Insp.PNG)
 
-As I clicked on the items I wanted to extract on the webpage, I took note of the tagnames associated with them. Beautiful Soup uses these tagnames to extract the text we need. Through some trial and error, I ended up with the following function to extract the desired text to make the reviews dataset. 
+As I clicked on the items I wanted to extract on the webpage, I took note of the tag names associated with them. Beautiful Soup uses these tag names to extract the text we need. Through some trial and error, I ended up with the following function to extract the desired text to make the reviews dataset. 
 
 ```python 
 def cus_rev_zappos(soup, b = True):
@@ -98,7 +98,7 @@ def cus_rev_zappos(soup, b = True):
   rating_type = []
   rating_return = []
   
-  #Extract reivew
+  #Extract review
   for item in soup.find_all("div", class_="Xl-z Yl-z"):
       review_text.append(item.get_text())
 
@@ -123,7 +123,7 @@ def cus_rev_zappos(soup, b = True):
   return review, date, rating_return
   ```
 
-I then iterated over and extracted the text from the downloaded webpages using the following code, and we got a decent amount of data! There are over 9,000 distinct reviews here. Below is a glance at the data.
+I then iterated over and extracted the text from the downloaded web pages using the following code, and we got a decent amount of data! There are over 9,000 distinct reviews here. Below is a glance at the data.
 
 ```python 
 from tqdm.notebook import tqdm
@@ -241,4 +241,5 @@ plt.show()
     
 ![png](/wordcloud.png)
     
-"Croc" and "Love" seem to go together a lot. Why am I not surprised? :) I'm excited to see what I can do with this data in the future! Again, here's the [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you'd like. 
+"Croc" and "Love" seem to go together a lot. Why am I not surprised? :) I'm excited to see what I can do with this data in the future! Again, here's the [link](https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data) to download the dataset if you'd like.
+

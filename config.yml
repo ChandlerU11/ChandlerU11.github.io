@@ -76,8 +76,8 @@ params:
     #subtitle: Welcome! I'm a machine learning engineer / data scientist with strong interest and experience in natural language processing and generative AI. I have a masters in computer science, and I most recently worked as a researcher at Boise State University, using machine learning to build online misinformation detection systems and training generative AIs to attack those systems. I'm currently on the hunt for Software Engineer roles and roles that fall under the Data Science \"umbrella\". Thanks for visiting, and I hope you enjoy your time here.
     imageUrl: "IMG_0255.JPG"
     imageTitle: image
-    imageWidth: 240
-    imageHeight: 240
+    imageWidth: 365
+    imageHeight: 300
     buttons:
       - name: Posts
         url: archives
