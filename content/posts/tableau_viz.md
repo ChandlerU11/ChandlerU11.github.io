@@ -1,6 +1,6 @@
 ---
 title: Running Data Dashboard
-date: 2024-02-14
+date: 2024-08-14
 author: Chandler Underwood
 description: Using the running data I cleaned up in a previous post, I create a Tableau dashboard that allows for dynamic granularity changes from the year down to day level.
 ShowToc: true

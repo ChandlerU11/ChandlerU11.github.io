@@ -1,5 +1,6 @@
 ---
 title: Imbalanced Product Review Sentiment Classification
+date: 2024-08-29
 author: Chandler Underwood
 description: Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset.
 ShowToc: true
