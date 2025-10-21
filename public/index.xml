@@ -2,74 +2,124 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chandler Underwood</title>
-    <link>http://localhost:1313/</link>
+    <link>https://chandleru11.github.io/</link>
     <description>Recent content on Chandler Underwood</description>
-    <generator>Hugo</generator>
+    <image>
+      <title>Chandler Underwood</title>
+      <url>https://chandleru11.github.io/images/papermod-cover.png</url>
+      <link>https://chandleru11.github.io/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 29 Aug 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chandleru11.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Imbalanced Product Review Sentiment Classification</title>
-      <link>http://localhost:1313/posts/review_classifier/</link>
+      <link>https://chandleru11.github.io/posts/review_classifier/</link>
       <pubDate>Thu, 29 Aug 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/review_classifier/</guid>
-      <description>&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;&#xA;&#xA;&lt;h2 id=&#34;class-imbalance-and-problem-statement&#34;&gt;Class Imbalance and Problem Statement&lt;/h2&gt;&#xA;&lt;p&gt;Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome previously-scraped &lt;a href=&#34;http://localhost:1313/posts/review_scrape/&#34;&gt;croc reviews data&lt;/a&gt; is unfortunately not so awesome from a class balance standpoint. Soon, we&amp;rsquo;ll assign binary class labels based on the rating a customer gave with their review where we&amp;rsquo;ll consider ratings of 2 stars (out of 5) or less to be negative sentiment and the remaining reviews as positive sentiment. As you&amp;rsquo;ll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that&amp;rsquo;s great!&lt;/p&gt;</description>
+      <guid>https://chandleru11.github.io/posts/review_classifier/</guid>
+      <description>Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset.</description>
     </item>
     <item>
       <title>Running Data Dashboard</title>
-      <link>http://localhost:1313/posts/tableau_viz/</link>
+      <link>https://chandleru11.github.io/posts/tableau_viz/</link>
       <pubDate>Wed, 14 Aug 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/tableau_viz/</guid>
-      <description>&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;&#xA;&#xA;&lt;h1 id=&#34;about&#34;&gt;About&lt;/h1&gt;&#xA;&lt;p&gt;This post contains the dashboard I built to go along with my &lt;a href=&#34;http://localhost:1313/posts/clean_data/&#34;&gt;data cleaning project&lt;/a&gt; where I clean up my own running data from college. Shoutout to Andy Kriebel and his awesome YouTube &lt;a href=&#34;https://www.youtube.com/watch?v=EZMLjMaZYSs&amp;t=308s&#34;&gt;video&lt;/a&gt; for getting me started!&lt;/p&gt;&#xA;&lt;p&gt;The dashboard allows for dynamic exploration of the time series data from years down to days. I would recommend opening up the visualization to full screen, so you can see the &amp;ldquo;timeframe snapshots&amp;rdquo; along with my most important running stats.&lt;/p&gt;</description>
+      <guid>https://chandleru11.github.io/posts/tableau_viz/</guid>
+      <description>Using the running data I cleaned up in a previous post, I create a Tableau dashboard that allows for dynamic granularity changes from the year down to day level.</description>
     </item>
     <item>
       <title>Using Unsupervised ML to &#39;Typicalize&#39; Product Reviews</title>
-      <link>http://localhost:1313/posts/review_generizer/</link>
+      <link>https://chandleru11.github.io/posts/review_generizer/</link>
       <pubDate>Wed, 10 Jul 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/review_generizer/</guid>
-      <description>&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;&#xA;&#xA;&lt;h1 id=&#34;motivation&#34;&gt;Motivation&lt;/h1&gt;&#xA;&lt;p&gt;In my &lt;a href=&#34;http://localhost:1313/posts/review_scrape/&#34;&gt;last post&lt;/a&gt; where I scraped reviews for Crocs Clogs, I mentioned that I often find myself wishing for a succinct summary of the reviews for a product. Let&amp;rsquo;s flesh that out a bit more. What I mean when I say &amp;ldquo;succinct summary&amp;rdquo; is that I want a quick understanding of a specific aspect for a given product. For example, I know that crocs come in amazing colors already. I can see that in the photos. But, how do they fit? What about their comfort? I find myself often most concerned with a specific aspect of a product such as those. I want to know what people are typically saying about fit and comfort. Many retailers offer a search bar for reviews, so you can filter reviews on a keyword. BUT, searching for &amp;ldquo;fit&amp;rdquo; across all crocs reviews would return a ton of samples, and how can we know which ones are representative of the general sentiment people have in regards to fit? What if we could give consumers a snapshot of the reviews containing a word or phrase they search for? Could we show them a small set of reviews that best represent all the reviews that mention the word &amp;ldquo;fit&amp;rdquo;, for example? I think we can!&lt;/p&gt;</description>
+      <guid>https://chandleru11.github.io/posts/review_generizer/</guid>
+      <description>Using NLP and unsupervised machine learning techniques, I create a model that can select the most typical samples to represent a set of reviews containing a keyword.</description>
     </item>
     <item>
       <title>Building a Product Reviews Webscraper</title>
-      <link>http://localhost:1313/posts/review_scrape/</link>
+      <link>https://chandleru11.github.io/posts/review_scrape/</link>
       <pubDate>Sat, 15 Jun 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/review_scrape/</guid>
-      <description>&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;&#xA;&#xA;&lt;h1 id=&#34;motivation&#34;&gt;Motivation&lt;/h1&gt;&#xA;&lt;p&gt;Before we get into things, here&amp;rsquo;s a &lt;a href=&#34;https://www.kaggle.com/datasets/chandlerunderwood/crocs-clog-reviews/data&#34;&gt;link&lt;/a&gt; to download the dataset if you would like.&lt;/p&gt;&#xA;&lt;p&gt;Do you ever find yourself pouring over a product&amp;rsquo;s reviews trying to decide if it&amp;rsquo;s right for you? I sure do. Many of these times I&amp;rsquo;ve wished there was a quick summary of the reviews I could read to speed up the decision process. I&amp;rsquo;ve yet to see any online retailers doing exactly what I&amp;rsquo;m looking for, so I&amp;rsquo;ve decided to make my own review summarizer. But, we need some data for training such a tool.&lt;/p&gt;</description>
+      <guid>https://chandleru11.github.io/posts/review_scrape/</guid>
+      <description>Using the Python Requests and Beautiful Soup libraries, I construct a webscraper that can farm product reviews off of Zappos.com.</description>
     </item>
     <item>
       <title>Cleaning Up Years of Daily Running Data</title>
-      <link>http://localhost:1313/posts/clean_data/</link>
+      <link>https://chandleru11.github.io/posts/clean_data/</link>
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/clean_data/</guid>
-      <description>&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;&#xA;&#xA;&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;For those of you that don&amp;rsquo;t know me personally, I managed to run collegiately for 6 years (thanks Covid?). Over that time I logged a lot of miles and a lot of Garmin activities. I still run quite a bit, but my barn burning days are behind me. I&amp;rsquo;d like to build a dashboard to get some insights to my running trends during that time as a sort of &amp;ldquo;last hoorah&amp;rdquo;, but sadly, a lot of my running data is missing and messy. I think cleaning it up will make for a great project to test my skills! Follow along here as I clean up and fill-in my running data using various techniques such as pulling outside data sources and training some ML models to predict missing values.&lt;/p&gt;</description>
+      <guid>https://chandleru11.github.io/posts/clean_data/</guid>
+      <description>In this project I use several techniques to clean up and fill-in my running data from college that spans 6 years.</description>
     </item>
     <item>
       <title>About</title>
-      <link>http://localhost:1313/about/</link>
+      <link>https://chandleru11.github.io/about/</link>
       <pubDate>Mon, 21 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/about/</guid>
-      <description>&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;&#xA;&#xA;&lt;hr&gt;&#xA;&lt;h1 id=&#34;education&#34;&gt;Education&lt;/h1&gt;&#xA;&lt;h2 id=&#34;master-of-science-in-computer-science&#34;&gt;Master of Science in Computer Science&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Boise State University&lt;/strong&gt; | &lt;em&gt;Graduation Date: August, 2023&lt;/em&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Relevant Coursework:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Deep Learning&lt;/li&gt;&#xA;&lt;li&gt;Intro to Data Science&lt;/li&gt;&#xA;&lt;li&gt;Large-Scale Data Analysis&lt;/li&gt;&#xA;&lt;li&gt;Machine Learning&lt;/li&gt;&#xA;&lt;li&gt;Natural Language Processing&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;bachelor-of-science-in-computer-science-mathematics-minor&#34;&gt;Bachelor of Science in Computer Science, Mathematics Minor&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Mississippi State University&lt;/strong&gt; | &lt;em&gt;Graduation Date: May, 2021&lt;/em&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Relevant Coursework:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Calculus I-IV&lt;/li&gt;&#xA;&lt;li&gt;Database Management Systems&lt;/li&gt;&#xA;&lt;li&gt;Data Structures and Algorithms&lt;/li&gt;&#xA;&lt;li&gt;Linear Algebra&lt;/li&gt;&#xA;&lt;li&gt;Object-Oriented Programming&lt;/li&gt;&#xA;&lt;li&gt;Statistical Inference and Probability&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h1 id=&#34;experience&#34;&gt;Experience&lt;/h1&gt;&#xA;&lt;h2 id=&#34;blue-cross-of-idaho&#34;&gt;Blue Cross of Idaho&lt;/h2&gt;&#xA;&lt;p&gt;&lt;em&gt;Healthcare Data Analyst&lt;/em&gt; | June 2024 - Present&lt;/p&gt;</description>
+      <guid>https://chandleru11.github.io/about/</guid>
+      <description>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag(&#39;js&#39;, new Date());
+
+  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;/html&gt;
+
+&lt;hr&gt;
+&lt;h1 id=&#34;experience&#34;&gt;Experience&lt;/h1&gt;
+&lt;h2 id=&#34;blue-cross-of-idaho&#34;&gt;Blue Cross of Idaho&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Healthcare Data Analyst&lt;/em&gt; | June 2024 - Present&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Developed and optimized healthcare analytics reports to streamline reporting processes, saving hours of manual reporting time each week using Python, Pandas, and SQL&lt;/li&gt;
+&lt;li&gt;Implemented and maintained hundreds of SQL queries to extract, manipulate, and analyze large datasets from relational databases to gain insights&lt;/li&gt;
+&lt;li&gt;Collaborated with cross-functional teams to identify key performance indicators, creating custom data solutions to improve decision-making&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;boise-state-university&#34;&gt;Boise State University&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Machine Learning Research Associate&lt;/em&gt; | September 2023 - January 2024&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:1313/projects/</link>
+      <link>https://chandleru11.github.io/projects/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/projects/</guid>
-      <description>&lt;h1 id=&#34;rest-method-for-fine-tuning-llms-using-huggingface&#34;&gt;ReST Method for Fine-tuning LLMs using Huggingface&lt;/h1&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://github.com/ChandlerU11/Hugging_ReST&#34;&gt;&lt;img alt=&#34;Alt Text&#34; src=&#34;http://localhost:1313/sleepy_ducky.jpg&#34;&gt;&lt;/a&gt;&lt;/p&gt;&#xA;&lt;h1 id=&#34;running-data-cleaner&#34;&gt;Running Data Cleaner&lt;/h1&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://github.com/ChandlerU11/Running_Data_Cleaner/tree/main&#34;&gt;&lt;img alt=&#34;Alt Text&#34; src=&#34;http://localhost:1313/run_ducky.jpg&#34;&gt;&lt;/a&gt;&lt;/p&gt;&#xA;&#xD;&#xA;&#xA;&lt;!DOCTYPE html&gt;&#xA;&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;&#xA;&lt;script&gt;&#xA;  window.dataLayer = window.dataLayer || [];&#xA;  function gtag(){dataLayer.push(arguments);}&#xA;  gtag(&#39;js&#39;, new Date());&#xA;&#xA;  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);&#xA;&lt;/script&gt;&#xA;&lt;/head&gt;&#xA;&lt;/html&gt;</description>
+      <guid>https://chandleru11.github.io/projects/</guid>
+      <description>&lt;h1 id=&#34;rest-method-for-fine-tuning-llms-using-huggingface&#34;&gt;ReST Method for Fine-tuning LLMs using Huggingface&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/ChandlerU11/Hugging_ReST&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://chandleru11.github.io/sleepy_ducky.jpg&#34; alt=&#34;Alt Text&#34;  /&gt;
+&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;running-data-cleaner&#34;&gt;Running Data Cleaner&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/ChandlerU11/Running_Data_Cleaner/tree/main&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://chandleru11.github.io/run_ducky.jpg&#34; alt=&#34;Alt Text&#34;  /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;script async src=&#34;https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX&#34;&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag(&#39;js&#39;, new Date());
+
+  gtag(&#39;config&#39;, &#39;G-0NTZD30YVX&#39;);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;/html&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:1313/publications/</link>
+      <link>https://chandleru11.github.io/publications/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/publications/</guid>
-      <description>&lt;h1 id=&#34;understanding-teenagers-real-and-fake-news-sharing-on-social-media&#34;&gt;Understanding Teenagers’ Real and Fake News Sharing on Social Media&lt;/h1&gt;&#xA;&lt;p&gt;&lt;strong&gt;Abstract:&lt;/strong&gt; In this paper, we present results from our research work focused&#xA;on understanding teenagers’ real and fake news sharing on social&#xA;media. Using existing real/fake news samples and best practices&#xA;in qualitative, inductive data analysis, we identify factors that explain teenagers’ sharing and not sharing behavior of real and fake&#xA;news. Our findings suggest that influencing teenagers’ decisions&#xA;to share or not share news on social media requires changes in the&#xA;knowledge of what is found in social media and enhancement of&#xA;knowledge of the algorithmic effects of sharing or not sharing.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Posts</title>
-      <link>http://localhost:1313/archives/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/archives/</guid>
-      <description>archives</description>
+      <guid>https://chandleru11.github.io/publications/</guid>
+      <description>&lt;h1 id=&#34;understanding-teenagers-real-and-fake-news-sharing-on-social-media&#34;&gt;Understanding Teenagers’ Real and Fake News Sharing on Social Media&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Abstract:&lt;/strong&gt; In this paper, we present results from our research work focused
+on understanding teenagers’ real and fake news sharing on social
+media. Using existing real/fake news samples and best practices
+in qualitative, inductive data analysis, we identify factors that explain teenagers’ sharing and not sharing behavior of real and fake
+news. Our findings suggest that influencing teenagers’ decisions
+to share or not share news on social media requires changes in the
+knowledge of what is found in social media and enhancement of
+knowledge of the algorithmic effects of sharing or not sharing.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

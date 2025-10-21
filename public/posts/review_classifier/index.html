@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Imbalanced Product Review Sentiment Classification | Chandler Underwood</title>
+<meta name="keywords" content="">
+<meta name="description" content="Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset.">
+<meta name="author" content="Chandler Underwood">
+<link rel="canonical" href="https://chandleru11.github.io/posts/review_classifier/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://chandleru11.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://chandleru11.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://chandleru11.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://chandleru11.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://chandleru11.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://chandleru11.github.io/posts/review_classifier/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Imbalanced Product Review Sentiment Classification" />
+<meta property="og:description" content="Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chandleru11.github.io/posts/review_classifier/" /><meta property="og:image" content="https://chandleru11.github.io/images/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-08-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-08-29T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://chandleru11.github.io/images/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Imbalanced Product Review Sentiment Classification"/>
+<meta name="twitter:description" content="Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://chandleru11.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Imbalanced Product Review Sentiment Classification",
+      "item": "https://chandleru11.github.io/posts/review_classifier/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Imbalanced Product Review Sentiment Classification",
+  "name": "Imbalanced Product Review Sentiment Classification",
+  "description": "Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset.",
+  "keywords": [
+    
+  ],
+  "articleBody": "\r\u003c!DOCTYPE html\u003e Class Imbalance and Problem Statement Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome previously-scraped croc reviews data is unfortunately not so awesome from a class balance standpoint. Soon, we’ll assign binary class labels based on the rating a customer gave with their review where we’ll consider ratings of 2 stars (out of 5) or less to be negative sentiment and the remaining reviews as positive sentiment. As you’ll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that’s great!\nHowever, I don’t believe Crocs reached the top of the shoe game by mistake. I’d be willing to bet the creators behind Crocs are more than willing to confront their flaws and improve upon them. Let’s pretend the good people behind Crocs have asked us to build an ML model to effectively classify the rare negative review for their product despite the severe class imbalance. They don’t mind a few misclassifications of the positive reviews here and there but would prefer there aren’t a ton of these instances.\nQuick Note on Positive / Negative Lingo Traditionally, the positive class in a binary labeled dataset is the minority class of most interest / importance, and that will hold true in this project. Apologies for any confusion, but going forward when I reference the positive class, I will be referencing the set of negative sentiment reviews.\nPositive Class (1) - Negative Sentiment Review :( Negative Class (0) - Positive Sentiment Review :) Below is a look at the class imbalance of our data.\nimport pandas as pd from collections import Counter import seaborn as sns df = pd.read_csv('/content/drive/MyDrive/croc_reviews.csv') df['label'] = [0 if each \u003e 2 else 1 for each in df['rating']] sns.countplot(x = df['label'], hue = df['label']) print(\"Only\", \"{:.0%}\".format(label_count[1] / (label_count[1] + label_count[0])), \"of our data belongs to the positive class.\") Only 6% of our data belongs to the positive class. Data Clean Up Before we start addressing the class imbalance issue, let’s clean up the reviews using the text cleaning function we’ve used before.\nimport re import string import nltk from nltk.corpus import stopwords from nltk.stem import PorterStemmer def clean_text(text): # Remove punctuation text = re.sub(f\"[{re.escape(string.punctuation)}]\", \"\", text) # Remove numbers text = re.sub(r'\\d+', '', text) # Convert to lowercase text = text.lower() # Remove stopwords nltk.download('stopwords', quiet=True) stop_words = set(stopwords.words('english')) tokens = nltk.word_tokenize(text) tokens = [word for word in tokens if word.lower() not in stop_words] # Stemming stemmer = PorterStemmer() tokens = [stemmer.stem(word) for word in tokens] # Join the tokens back into a single string cleaned_text = ' '.join(tokens) return cleaned_text df['clean_review'] = [clean_text(text_to_clean) for text_to_clean in df['review']] df review date rating label clean_review 0 !!!!!! E X C E L L E N T!!!!!!!!!! April 7, 2022 5.0 0 e x c e l l e n 1 \"They're crocs; people know what crocs are.\" April 3, 2021 5.0 0 theyr croc peopl know croc 2 - Quick delivery and the product arrived when ... March 19, 2023 5.0 0 quick deliveri product arriv compani said woul... 3 ...amazing \"new\" color!! who knew?? love - lov... July 17, 2022 5.0 0 amaz new color knew love love love 4 0 complaints from me; this is the 8th pair of ... June 4, 2021 5.0 0 complaint th pair croc ive bought like two mon... ... ... ... ... ... ... 9233 I will definitely be buying again in many colo... August 25, 2021 4.0 0 definit buy mani color reason materi feel thin... 9234 I wish I would have bought crocs a long time ago. April 8, 2021 5.0 0 wish would bought croc long time ago 9235 wonderful. Gorgeous blue; prettier in person! April 27, 2022 5.0 0 wonder gorgeou blue prettier person 9236 Wonerful. Very comfy, and there are no blister... April 8, 2021 5.0 0 woner comfi blister feet unlik brand one 9237 Work from home - high arch need good support a... May 22, 2023 5.0 0 work home high arch need good support comfort ... 9238 rows × 5 columns\nStrategy: Performance Metrics and Dealing with Imbalanced Data Because we’re dealing with imbalanced data and are most concerned with identifying the minority / positive class, we will focus on improving the recall score of our models on the test set. We will also watch F2 score, a modified version of F1 score that increases the importance of recall in its calculation. Why F2 score? We are concerned with maximizing recall, but a model that predicts the minority class 100% of the time would achieve a perfect recall score. That doesn’t help us very much, and F2 score will give us an understanding of how well the model can differentiate between the two classes along with how well the model can identify positive samples. Below are the formulas to calculate the performance metrics.\nRecall - True Positive / (True Positive + False Negative) Precision - True Positive / (True Positive + False Positive) F2 Score - (5 * Precision * Recall) / (4 * Precision + Recall) There are a lot of ways to address the imbalanced data problem when training a classifier. In this project we’re going to adopt the following strategy:\nImplement multiple methods for resampling the data Train multiple baseline models using each of the resampling methods to see which resampling / model combo performs the best out of the box based on F2 and recall score Use GridsearchCV to tune the best baseline model for recall score whilst continuing to use the best resampling technique Alter the model’s decision threshold to maximize recall score Step 1: Implement Multiple Resampling Methods Thank goodness for the Imbalanced-Learn library because it makes data resampling much easier. The term resampling refers to the practice of balancing data by either selecting a subset of the majority class equal in size to the minority class (known as under-sampling) or artificially making the minority class as large as the majority (known as over-sampling). There are many different techniques for doing these processes, but we’ll try out the following:\nRandom Over-sampling - Randomly selects samples from the minority class and replaces them in the dataset. Random Under-sampling - Randomly selects and removes samples from the majority class. SMOTE Over-sampling - Synthetic Minority Over-sampling Technique (SMOTE) generates new samples for the minority class by imitating its features. The original paper explaining the technique can be found here. Cluster Under-sampling - Under-samples the majority class by replacing a cluster of majority samples by the cluster centroid of a KMeans algorithm. Keeps N majority samples by fitting the KMeans algorithm with N clusters to the majority class and keeping the centroids. The original paper explaining the technique can be found here from sklearn.cluster import MiniBatchKMeans from sklearn.metrics import fbeta_score, recall_score, accuracy_score, confusion_matrix, precision_recall_curve from imblearn.over_sampling import RandomOverSampler, SMOTE from imblearn.under_sampling import RandomUnderSampler, ClusterCentroids import numpy as np def rand_oversample(X, y): ros = RandomOverSampler(random_state=42) X_res, y_res = ros.fit_resample(X, y) return {'X_train': X_res, 'y_train':y_res} def rand_undersample(X, y): rus = RandomUnderSampler(random_state=42) X_res, y_res = rus.fit_resample(X, y) return {'X_train': X_res, 'y_train':y_res} def smote_oversample(X,y): sm = SMOTE(random_state=42) X_res, y_res = sm.fit_resample(X, y) return {'X_train': X_res, 'y_train':y_res} def cluster_undersample(X, y): cc = ClusterCentroids( estimator=MiniBatchKMeans(n_init=1, random_state=0), random_state=42) X_res, y_res = cc.fit_resample(X, y) return {'X_train': X_res, 'y_train':y_res} Holdout test set Let’s split our data into a train and test set. We will not alter the balance of the test set because we won’t be able to do that in the real world. However, our train set will undergo resampling as we find the best baseline model and resampling combo.\nfrom sklearn.feature_extraction.text import TfidfVectorizer from sklearn.model_selection import train_test_split def show_imb(label): imb = Counter(label) return str(imb[0]) + ' Negative Samples | ' + str(imb[1]) + ' Positive Samples' # We'll be using TF-IDF for this project vectorizer = TfidfVectorizer() vect_df = pd.DataFrame(vectorizer.fit_transform(df['clean_review']).todense(), columns=vectorizer.get_feature_names_out()) vect_df['label'] = df['label'].copy() # Train / test split df_train, df_test = train_test_split(vect_df, test_size = .1, random_state = 0) y_train, y_test = df_train['label'].tolist(), df_test['label'].tolist() X_train, X_test = df_train.drop(['label'], axis = 1), df_test.drop(['label'], axis = 1) print('Holdout Test Set Class Balance: ' + show_imb(y_test)) Holdout Test Set Class Balance: 872 Negative Samples | 52 Positive Samples Step 2: Train Multiple Baseline Classifiers Using Resampling Methods Let’s alter our training data using each of the resampling methods and train using each one. We’ll also train using the unsampled original training data as a baseline.\nsampled_data_dict = {'no_sample': {'X_train': X_train, 'y_train':y_train}, 'random_oversample': rand_oversample(X_train, y_train), 'random_undersample': rand_undersample(X_train, y_train), 'smote_oversample': smote_oversample(X_train, y_train), 'cluster_undersample': cluster_undersample(X_train, y_train)} # A look at the class balance following resampling for s in sampled_data_dict.keys(): txt = 'Class Balance with {:\u003c25}' + show_imb(sampled_data_dict[s]['y_train']) print(txt.format(s + ':')) Class Balance with no_sample: 7767 Negative Samples | 547 Positive Samples Class Balance with random_oversample: 7767 Negative Samples | 7767 Positive Samples Class Balance with random_undersample: 547 Negative Samples | 547 Positive Samples Class Balance with smote_oversample: 7767 Negative Samples | 7767 Positive Samples Class Balance with cluster_undersample: 547 Negative Samples | 547 Positive Samples As you can see, all the resampled training sets are now balanced except for the basline with no resampling. Let’s train some baseline classifiers with each resampling method and view the results on the unaltered test set.\nfrom tqdm.notebook import tqdm from sklearn.ensemble import RandomForestClassifier from sklearn.naive_bayes import GaussianNB from sklearn.linear_model import LogisticRegression # Baseline Models models_dict = {'Naive Bayes': GaussianNB(), 'Random Forest': RandomForestClassifier(max_depth=10, random_state=0), 'Logistic Regression': LogisticRegression(random_state=0)} # Dataframe to view test results results_df = pd.DataFrame(columns = ['model_name', 'sampling_type', 'model', 'fbeta', 'recall']) # Iterate over all models and all resampling techniques for m in tqdm(models_dict.keys()): for d in tqdm(sampled_data_dict.keys()): # Fit model on resampled data model = models_dict[m].fit(sampled_data_dict[d]['X_train'], sampled_data_dict[d]['y_train']) # Predict on holdout test set preds = model.predict(X_test) # Add test results to dataframe results = [m, d, model, fbeta_score(y_test, preds, beta = 2), recall_score(y_test, preds)] results_df.loc[-1] = results results_df.index = results_df.index + 1 results_df = results_df.sort_index() results_df.sort_values(by = 'recall', ascending = False) model_name sampling_type model fbeta recall 5 Random Forest cluster_undersample (DecisionTreeClassifier(max_depth=10, max_feat... 0.442708 0.980769 0 Logistic Regression cluster_undersample LogisticRegression(random_state=0) 0.634518 0.961538 2 Logistic Regression random_undersample LogisticRegression(random_state=0) 0.664820 0.923077 7 Random Forest random_undersample (DecisionTreeClassifier(max_depth=10, max_feat... 0.574413 0.846154 3 Logistic Regression random_oversample LogisticRegression(random_state=0) 0.684713 0.826923 8 Random Forest random_oversample (DecisionTreeClassifier(max_depth=10, max_feat... 0.598291 0.807692 1 Logistic Regression smote_oversample LogisticRegression(random_state=0) 0.665584 0.788462 10 Naive Bayes cluster_undersample GaussianNB() 0.288462 0.750000 11 Naive Bayes smote_oversample GaussianNB() 0.286344 0.750000 13 Naive Bayes random_oversample GaussianNB() 0.283843 0.750000 14 Naive Bayes no_sample GaussianNB() 0.283843 0.750000 6 Random Forest smote_oversample (DecisionTreeClassifier(max_depth=10, max_feat... 0.523649 0.596154 12 Naive Bayes random_undersample GaussianNB() 0.341463 0.538462 4 Logistic Regression no_sample LogisticRegression(random_state=0) 0.115207 0.096154 9 Random Forest no_sample (DecisionTreeClassifier(max_depth=10, max_feat... 0.000000 0.000000 In terms of recall the random forest / cluster undersampling combo is the best, but it is quite weak in terms of F2 score, which means it will likely give us a lot of false positives in its predictions. The logistic regression / cluster undersample performs similarly in terms of recall, but maintains a much better F2 score, so we’ll move forward with that model! Let’s have a better look at its performance out of the box using a confusion matrix.\ndef show_confusion(y_test, pred): cf = confusion_matrix(y_test, pred) group_names = [\"True Negatives\",\"False Positives\",\"False Negatives\",\"True Positives\"] group_perc = [cf.flatten()[0] / (cf.flatten()[0] + cf.flatten()[1]), cf.flatten()[1] / (cf.flatten()[0] + cf.flatten()[1]) , cf.flatten()[2] / (cf.flatten()[2] + cf.flatten()[3]), cf.flatten()[3] / (cf.flatten()[2] + cf.flatten()[3])] group_perc_str = [\"{:.0%}\".format(each) for each in group_perc] group_counts = [\"{0:0.0f}\".format(value) for value in cf.flatten()] labels = labels = [f\"{v1} {v2}\\n{v3} of class total\" for v1, v2, v3 in zip(group_counts, group_names, group_perc_str)] labels = np.asarray(labels).reshape(2,2) group_perc = np.asarray(group_perc).reshape(2,2) print(sns.heatmap(group_perc, annot=labels, fmt = '', cmap='Greens')) best_baseline_model = results_df.loc[(results_df['model_name'] == 'Logistic Regression') \u0026 (results_df['sampling_type'] == 'cluster_undersample')]['model'][0] show_confusion(y_test, best_baseline_model.predict(X_test)) We’re already in a really good spot as we are correctly identifying the positive class over 96% of the time. We have more false positives than I’d like, but maybe some hyperparameter tuning can help here.\nStep 3: Finding Best Hyperparams with GridsearchCV For finding the best logistic regression hyperparams, we will use Scikit-Learn’s GridSearchCV in combination with an Imblearn Pipeline. GridsearchCV performs an exhaustive search over the provided parameters and performs cross-validation for every parameter combination. Imblearn’s Pipeline allows us to perform the same resampling technique we chose in step two with GridsearchCV. The pipeline will resample the training data using cluster undersampling but will not touch the balance of the test data in the fold. We’ll set up GridsearchCV to optimize for recall score and have it return the model that performed the best in terms of average recall across all folds.\nfrom imblearn.pipeline import Pipeline from sklearn.model_selection import GridSearchCV model = Pipeline([ # Perform resampling on train split ('sampling', ClusterCentroids(estimator=MiniBatchKMeans(n_init=1, random_state=0), random_state=42)), ('classification', LogisticRegression(random_state = 42)) ]) parameters = {'classification__solver':('liblinear', 'lbfgs'), 'classification__C':[1, 5, 10]} # Returns best model in terms of recall score best_grid_model = GridSearchCV(model, param_grid = parameters, cv = 5, refit = True, scoring = 'recall') best_grid_model.fit(X_train, y_train) # A look at how well all hyperparameter combinations perform pd.DataFrame(best_grid_model.cv_results_).sort_values(by = 'rank_test_score') mean_fit_time std_fit_time mean_score_time std_score_time param_classification__C param_classification__solver params split0_test_score split1_test_score split2_test_score split3_test_score split4_test_score mean_test_score std_test_score rank_test_score 2 29.715823 3.306074 0.068921 0.016334 5 liblinear {'classification__C': 5, 'classification__solv... 0.908257 0.935780 0.936364 0.909091 0.889908 0.915880 0.017857 1 3 29.644415 3.598677 0.095378 0.026857 5 lbfgs {'classification__C': 5, 'classification__solv... 0.908257 0.935780 0.936364 0.909091 0.889908 0.915880 0.017857 1 0 29.187842 2.767306 0.057547 0.019141 1 liblinear {'classification__C': 1, 'classification__solv... 0.899083 0.935780 0.927273 0.900000 0.889908 0.910409 0.017804 3 1 28.689645 3.572646 0.104958 0.027626 1 lbfgs {'classification__C': 1, 'classification__solv... 0.899083 0.935780 0.927273 0.900000 0.889908 0.910409 0.017804 3 4 28.605801 2.047266 0.052858 0.005150 10 liblinear {'classification__C': 10, 'classification__sol... 0.908257 0.926606 0.918182 0.890909 0.889908 0.906772 0.014572 5 5 32.235926 3.819624 0.099514 0.020922 10 lbfgs {'classification__C': 10, 'classification__sol... 0.908257 0.926606 0.918182 0.890909 0.889908 0.906772 0.014572 5 A look at the confusion matrix following hyperparameter tuning.\nshow_confusion(y_test, best_grid_model.predict(X_test)) This is a bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we attempted to let no positive samples slip past our classifier? This is where the fourth step can come in, altering the decision threshold of the model.\nStep 4: Altering the Decision Threshold Altering the decision threshold will allow us to catch more true positive samples by increasing the sensitivity of the model. This increase in sensitivity will come at a cost, however, causing a decrease in the precision of our model. But, that’s ok! We are most concerned with catching the true positives in this data and aren’t nearly as worried about false positives. Below is a look at our model’s precision-recall curve to get a better understanding of the tradeoff between the two measures prior to changing the decision threshold.\nfrom sklearn.metrics import precision_recall_curve # Get class probability scores y_scores = best_grid_model.predict_proba(X_test)[:, 1] # Returns precision-recall pairs for different probability thresholds p, r, thresholds = precision_recall_curve(y_test, y_scores) viz_df = pd.DataFrame({'Precision':p, 'Recall':r}) sns.lineplot(data = viz_df, x = \"Recall\", y = \"Precision\") For us to achieve perfect recall, the model’s precision is going to suffer quite a bit. Again, that’s OK because of this project’s main goal to effectively catch positive samples. Let’s iteratively lower the decision threshold until we achieve perfect recall.\ndef adjusted_classes(y_scores, t): # If pred probability is greater than or equal to threshold it is positive return [1 if y \u003e= t else 0 for y in y_scores] # Default sklearn logistic regression threshold init_threshold = 0.5 pred = adjusted_classes(y_scores, init_threshold) recall = recall_score(y_test, pred) # Stops when recall is perfect while recall != 1.0: init_threshold = init_threshold - 0.001 pred = adjusted_classes(y_scores, init_threshold) recall = recall_score(y_test, pred) print(\"Maximum Threshold for Perfect Recall:\", init_threshold) show_confusion(y_test, pred) Maximum Threshold for Perfect Recall: 0.3679999999999999 There you have it - a very sensitive model that doesn’t always spit out the positive class!\n",
+  "wordCount" : "2632",
+  "inLanguage": "en",
+  "datePublished": "2024-08-29T00:00:00Z",
+  "dateModified": "2024-08-29T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Chandler Underwood"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chandleru11.github.io/posts/review_classifier/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Chandler Underwood",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://chandleru11.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://chandleru11.github.io/" accesskey="h" title="Chandler Underwood (Alt + H)">Chandler Underwood</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://chandleru11.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chandleru11.github.io/archives" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chandleru11.github.io/projects" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://chandleru11.github.io/publications" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://chandleru11.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://chandleru11.github.io/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Imbalanced Product Review Sentiment Classification
+    </h1>
+    <div class="post-description">
+      Using NLP, resampling, and surpervised machine learning techniques, I create a model to effectively classify the minority negative sentiment contained in a product reviews dataset.
+    </div>
+    <div class="post-meta"><span title='2024-08-29 00:00:00 +0000 UTC'>August 29, 2024</span>&nbsp;·&nbsp;13 min&nbsp;·&nbsp;Chandler Underwood
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#class-imbalance-and-problem-statement" aria-label="Class Imbalance and Problem Statement">Class Imbalance and Problem Statement</a><ul>
+                        
+                <li>
+                    <a href="#quick-note-on-positive--negative-lingo" aria-label="Quick Note on Positive / Negative Lingo">Quick Note on Positive / Negative Lingo</a></li></ul>
+                </li>
+                <li>
+                    <a href="#data-clean-up" aria-label="Data Clean Up">Data Clean Up</a></li>
+                <li>
+                    <a href="#strategy-performance-metrics-and-dealing-with-imbalanced-data" aria-label="Strategy: Performance Metrics and Dealing with Imbalanced Data">Strategy: Performance Metrics and Dealing with Imbalanced Data</a></li>
+                <li>
+                    <a href="#step-1-implement-multiple-resampling-methods" aria-label="Step 1: Implement Multiple Resampling Methods">Step 1: Implement Multiple Resampling Methods</a><ul>
+                        
+                <li>
+                    <a href="#holdout-test-set" aria-label="Holdout test set">Holdout test set</a></li></ul>
+                </li>
+                <li>
+                    <a href="#step-2-train-multiple-baseline-classifiers-using-resampling-methods" aria-label="Step 2: Train Multiple Baseline Classifiers Using Resampling Methods">Step 2: Train Multiple Baseline Classifiers Using Resampling Methods</a></li>
+                <li>
+                    <a href="#step-3-finding-best-hyperparams-with-gridsearchcv" aria-label="Step 3: Finding Best Hyperparams with GridsearchCV">Step 3: Finding Best Hyperparams with GridsearchCV</a></li>
+                <li>
+                    <a href="#step-4-altering-the-decision-threshold" aria-label="Step 4: Altering the Decision Threshold">Step 4: Altering the Decision Threshold</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content">
+
+<!DOCTYPE html>
+<html>
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0NTZD30YVX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0NTZD30YVX');
+</script>
+</head>
+</html>
+
+<h2 id="class-imbalance-and-problem-statement">Class Imbalance and Problem Statement<a hidden class="anchor" aria-hidden="true" href="#class-imbalance-and-problem-statement">#</a></h2>
+<p>Class imbalance is a common problem when building classifiers in the machine learning world, and our awesome previously-scraped <a href="https://chandleru11.github.io/posts/review_scrape/">croc reviews data</a> is unfortunately not so awesome from a class balance standpoint. Soon, we&rsquo;ll assign binary class labels based on the rating a customer gave with their review where we&rsquo;ll consider ratings of 2 stars (out of 5) or less to be negative sentiment and the remaining reviews as positive sentiment. As you&rsquo;ll see in a moment, the vast majority of reviews belong to the positive sentiment class, and I think that&rsquo;s great!</p>
+<p>However, I don&rsquo;t believe Crocs reached the top of the shoe game by mistake. I&rsquo;d be willing to bet the creators behind Crocs are more than willing to confront their flaws and improve upon them. Let&rsquo;s pretend the good people behind Crocs have asked us to build an ML model to effectively classify the rare negative review for their product despite the severe class imbalance. They don&rsquo;t mind a few misclassifications of the positive reviews here and there but would prefer there aren&rsquo;t a ton of these instances.</p>
+<h3 id="quick-note-on-positive--negative-lingo">Quick Note on Positive / Negative Lingo<a hidden class="anchor" aria-hidden="true" href="#quick-note-on-positive--negative-lingo">#</a></h3>
+<p>Traditionally, the positive class in a binary labeled dataset is the minority class of most interest / importance, and that will hold true in this project. Apologies for any confusion, but going forward when I reference the positive class, I will be referencing the set of negative sentiment reviews.</p>
+<ul>
+<li>Positive Class (1) - Negative Sentiment Review :(</li>
+<li>Negative Class (0) - Positive Sentiment Review :)</li>
+</ul>
+<p>Below is a look at the class imbalance of our data.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/content/drive/MyDrive/croc_reviews.csv&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">each</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl"><span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">hue</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Only&#34;</span><span class="p">,</span> <span class="s2">&#34;</span><span class="si">{:.0%}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">label_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">label_count</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="s2">&#34;of our data belongs to the positive class.&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code>Only 6% of our data belongs to the positive class.
+</code></pre>
+<p><img loading="lazy" src="/class_balance.png" alt="png"  />
+</p>
+<h2 id="data-clean-up">Data Clean Up<a hidden class="anchor" aria-hidden="true" href="#data-clean-up">#</a></h2>
+<p>Before we start addressing the class imbalance issue, let&rsquo;s clean up the reviews using the text cleaning function we&rsquo;ve used before.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">re</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">string</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">nltk</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Remove punctuation</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span><span class="si">}</span><span class="s2">]&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Remove numbers</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Convert to lowercase</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Remove stopwords</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;stopwords&#39;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">tokens</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Stemming</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Join the tokens back into a single string</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cleaned_text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">cleaned_text</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="p">[</span><span class="s1">&#39;clean_review&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">clean_text</span><span class="p">(</span><span class="n">text_to_clean</span><span class="p">)</span> <span class="k">for</span> <span class="n">text_to_clean</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span>
+</span></span></code></pre></div><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>review</th>
+      <th>date</th>
+      <th>rating</th>
+      <th>label</th>
+      <th>clean_review</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>!!!!!! E X C E L L E N T!!!!!!!!!!</td>
+      <td>April 7, 2022</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>e x c e l l e n</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>"They're crocs; people know what crocs are."</td>
+      <td>April 3, 2021</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>theyr croc peopl know croc</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>- Quick delivery and the product arrived when ...</td>
+      <td>March 19, 2023</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>quick deliveri product arriv compani said woul...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>...amazing "new" color!! who knew?? love - lov...</td>
+      <td>July 17, 2022</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>amaz new color knew love love love</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0 complaints from me; this is the 8th pair of ...</td>
+      <td>June 4, 2021</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>complaint th pair croc ive bought like two mon...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9233</th>
+      <td>I will definitely be buying again in many colo...</td>
+      <td>August 25, 2021</td>
+      <td>4.0</td>
+      <td>0</td>
+      <td>definit buy mani color reason materi feel thin...</td>
+    </tr>
+    <tr>
+      <th>9234</th>
+      <td>I wish I would have bought crocs a long time ago.</td>
+      <td>April 8, 2021</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>wish would bought croc long time ago</td>
+    </tr>
+    <tr>
+      <th>9235</th>
+      <td>wonderful. Gorgeous blue; prettier in person!</td>
+      <td>April 27, 2022</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>wonder gorgeou blue prettier person</td>
+    </tr>
+    <tr>
+      <th>9236</th>
+      <td>Wonerful. Very comfy, and there are no blister...</td>
+      <td>April 8, 2021</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>woner comfi blister feet unlik brand one</td>
+    </tr>
+    <tr>
+      <th>9237</th>
+      <td>Work from home - high arch need good support a...</td>
+      <td>May 22, 2023</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>work home high arch need good support comfort ...</td>
+    </tr>
+  </tbody>
+</table>
+<p>9238 rows × 5 columns</p>
+<h2 id="strategy-performance-metrics-and-dealing-with-imbalanced-data">Strategy: Performance Metrics and Dealing with Imbalanced Data<a hidden class="anchor" aria-hidden="true" href="#strategy-performance-metrics-and-dealing-with-imbalanced-data">#</a></h2>
+<p>Because we&rsquo;re dealing with imbalanced data and are most concerned with identifying the minority / positive class, we will focus on improving the recall score of our models on the test set. We will also watch F2 score, a modified version of F1 score that increases the importance of recall in its calculation. Why F2 score? We are concerned with maximizing recall, but a model that predicts the minority class 100% of the time would achieve a perfect recall score. That doesn&rsquo;t help us very much, and F2 score will give us an understanding of how well the model can <em>differentiate</em> between the two classes along with how well the model can identify positive samples. Below are the formulas to calculate the performance metrics.</p>
+<ul>
+<li>Recall - True Positive / (True Positive + False Negative)</li>
+<li>Precision - True Positive / (True Positive + False Positive)</li>
+<li>F2 Score - (5 * Precision * Recall) / (4 * Precision + Recall)</li>
+</ul>
+<p>There are a lot of ways to address the imbalanced data problem when training a classifier. In this project we&rsquo;re going to adopt the following strategy:</p>
+<ol>
+<li>Implement multiple methods for resampling the data</li>
+<li>Train multiple baseline models using each of the resampling methods to see which resampling / model combo performs the best out of the box based on F2 and recall score</li>
+<li>Use GridsearchCV to tune the best baseline model for recall score whilst continuing to use the best resampling technique</li>
+<li>Alter the model&rsquo;s decision threshold to maximize recall score</li>
+</ol>
+<h2 id="step-1-implement-multiple-resampling-methods">Step 1: Implement Multiple Resampling Methods<a hidden class="anchor" aria-hidden="true" href="#step-1-implement-multiple-resampling-methods">#</a></h2>
+<p>Thank goodness for the Imbalanced-Learn library because it makes data resampling much easier. The term <em>resampling</em> refers to the practice of balancing data by either selecting a subset of the majority class equal in size to the minority class (known as under-sampling) or artificially making the minority class as large as the majority (known as over-sampling). There are many different techniques for doing these processes, but we&rsquo;ll try out the following:</p>
+<ul>
+<li><strong>Random Over-sampling</strong> - Randomly selects samples from the minority class and replaces them in the dataset.</li>
+<li><strong>Random Under-sampling</strong> - Randomly selects and removes samples from the majority class.</li>
+<li><strong>SMOTE Over-sampling</strong> - Synthetic Minority Over-sampling Technique (SMOTE) generates new samples for the minority class by imitating its features. The original paper explaining the technique can be found <a href="https://arxiv.org/abs/1106.1813">here</a>.</li>
+<li><strong>Cluster Under-sampling</strong> - Under-samples the majority class by replacing a cluster of majority samples by the cluster centroid of a KMeans algorithm. Keeps N majority samples by fitting the KMeans algorithm with N clusters to the majority class and keeping the centroids. The original paper explaining the technique can be found <a href="https://pdf.sciencedirectassets.com/271625/1-s2.0-S0020025517X00170/1-s2.0-S0020025517307235/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjECwaCXVzLWVhc3QtMSJHMEUCIQC47bRCWoWhx4j6dXe4DAUAWdSDDoet7OLFxgwHB7uAfgIgb3pt1u25LyN2tZusJtn2Yxk%2FKqPel%2F2Vti6NU1Owz64qswUINRAFGgwwNTkwMDM1NDY4NjUiDGNmcQlE3DCZtIhNGiqQBY6A5JS6LAtOqDyOvg4Vhben8nSOAewPv2FAGuOISVDZVmIt3OYVkmK7UZ1qJN9%2Fzv6%2BFO4G%2F464jqxxRarqICnAJLPdAkt3lPjqwC87UTmU3W3F2es59x0sQw56ruYP3BCGtBZH4tzgQa49COf5xt0DpydNMVrsrWB2u8LMajRV7YVDRuKIxLCzlRMi91TjOEXAbrDWhddvDT%2FeoWME4AoE3g%2BkSs0Xz6NljbajNeL%2BoDimhC8LFanY%2FgLLmWq6LpFC7nyvkqa9ZdFhEwWFWsA6Nv66adMa9LOm9DP9hRkOEqSpYlstUF0vteFtoWjfJBrVvSf4JTy1jNsUTwcNcHmCBlfgLuI57pZQ7FDxKAibMiTb8aHLBEepOHDKbslPMmRbLGMEsD8fTqc9bNIU70K9vbxcOg1Okuu42RYjUSnb5Vf3LgM8mnU7pvzUkyy47PiyqBRj2wlZycGLks4aduTR3Cewbl7p0CxHDU%2BTXTu7nqcC0W6NdMceiZCECVfP0%2FUxXOqxtdi4s15UzSKO9C%2FTu%2BMOOeV2Vy9h90ERHdEa5yN9ZizeESN33kbGxlz8c3HEufgfHicoGGhgSgiPoNmudweJONCd4ak6wnOhyB2o3MWlTYS0wJPfB9DTZGnfPq04sU%2FaBzNcQpbIFVRH6ne1i3W6kpAMDMA8iYNBogsSCWitXW%2F1SGYkQ0wAJopLxG8wRPvY%2Fxc0Mvs7Jl37nZvCOhZOf3OqE5i3mLQ2RUBbPIKjIcopdGkSHFLFepUBFcocXQQEJBusJci90KzPNQyHANvUVpH2DNS1milcvEQncbKRSB1dpo8zAwUNAyXtPPGneC5rOI5ru%2F%2BhQq3MPEoizmEDz4tWVOLeVZ2zEUTbMI%2B7va8GOrEBjt%2Bm8ryl%2FQ8hVgcyxitu9r7oI9EMMuu70tBqpdUULHm8pC%2FeEAjSI3xaX4uB5tX0wOSJoQ%2BB4P9I2bXGywVGMC3Q%2FBVvM7xFH9ZR3SUE2A6CZbrTCtHkLNnbTskXUM87CC%2BRrflJd8sFvcxA7jZHbph0MDOzypGXwJjpBogiiNXvlCUPw43IrfybKX5dvn9M8Y%2Bjo%2BQxqYGAI4ThhsFQBn3EVqnoiz8Kc5C9lDjhDVgJ&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240311T201637Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTYYXF3U3OZ%2F20240311%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=493c301e9e2a2e5606362ed4128cf03fca2a6a4895d39a12d5d0230352638373&hash=3e1692ea3b2683c14cc13a0ef73b1fbd600a61cd4b1153cbe8a5036385efdd16&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0020025517307235&tid=spdf-1028a5cd-4900-4631-8332-f58760d29c54&sid=b192a3b699e39243f42a7ed60f275680281bgxrqa&type=client&tsoh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&ua=0f175c53510255565004&rr=862e392c5bd508ef&cc=us">here</a></li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">MiniBatchKMeans</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">fbeta_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">precision_recall_curve</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">imblearn.over_sampling</span> <span class="kn">import</span> <span class="n">RandomOverSampler</span><span class="p">,</span> <span class="n">SMOTE</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">imblearn.under_sampling</span> <span class="kn">import</span> <span class="n">RandomUnderSampler</span><span class="p">,</span> <span class="n">ClusterCentroids</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rand_oversample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ros</span> <span class="o">=</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span> <span class="o">=</span> <span class="n">ros</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;X_train&#39;</span><span class="p">:</span> <span class="n">X_res</span><span class="p">,</span> <span class="s1">&#39;y_train&#39;</span><span class="p">:</span><span class="n">y_res</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rand_undersample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="n">rus</span> <span class="o">=</span> <span class="n">RandomUnderSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span> <span class="o">=</span> <span class="n">rus</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;X_train&#39;</span><span class="p">:</span> <span class="n">X_res</span><span class="p">,</span> <span class="s1">&#39;y_train&#39;</span><span class="p">:</span><span class="n">y_res</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">smote_oversample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="n">sm</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;X_train&#39;</span><span class="p">:</span> <span class="n">X_res</span><span class="p">,</span> <span class="s1">&#39;y_train&#39;</span><span class="p">:</span><span class="n">y_res</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">cluster_undersample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="n">cc</span> <span class="o">=</span> <span class="n">ClusterCentroids</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">estimator</span><span class="o">=</span><span class="n">MiniBatchKMeans</span><span class="p">(</span><span class="n">n_init</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;X_train&#39;</span><span class="p">:</span> <span class="n">X_res</span><span class="p">,</span> <span class="s1">&#39;y_train&#39;</span><span class="p">:</span><span class="n">y_res</span><span class="p">}</span>
+</span></span></code></pre></div><h3 id="holdout-test-set">Holdout test set<a hidden class="anchor" aria-hidden="true" href="#holdout-test-set">#</a></h3>
+<p>Let&rsquo;s split our data into a train and test set. We will not alter the balance of the test set because we won&rsquo;t be able to do that in the real world. However, our train set will undergo resampling as we find the best baseline model and resampling combo.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show_imb</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="n">imb</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">imb</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; Negative Samples | &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">imb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; Positive Samples&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We&#39;ll be using TF-IDF for this project</span>
+</span></span><span class="line"><span class="cl"><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">vect_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;clean_review&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">todense</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="n">vect_df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Train / test split</span>
+</span></span><span class="line"><span class="cl"><span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">vect_df</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">.1</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span> <span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Holdout Test Set Class Balance: &#39;</span> <span class="o">+</span> <span class="n">show_imb</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+</span></span></code></pre></div><pre><code>Holdout Test Set Class Balance: 872 Negative Samples | 52 Positive Samples
+</code></pre>
+<h2 id="step-2-train-multiple-baseline-classifiers-using-resampling-methods">Step 2: Train Multiple Baseline Classifiers Using Resampling Methods<a hidden class="anchor" aria-hidden="true" href="#step-2-train-multiple-baseline-classifiers-using-resampling-methods">#</a></h2>
+<p>Let&rsquo;s alter our training data using each of the resampling methods and train using each one. We&rsquo;ll also train using the unsampled original training data as a baseline.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sampled_data_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;no_sample&#39;</span><span class="p">:</span>           <span class="p">{</span><span class="s1">&#39;X_train&#39;</span><span class="p">:</span> <span class="n">X_train</span><span class="p">,</span> <span class="s1">&#39;y_train&#39;</span><span class="p">:</span><span class="n">y_train</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">                     <span class="s1">&#39;random_oversample&#39;</span><span class="p">:</span>   <span class="n">rand_oversample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                     <span class="s1">&#39;random_undersample&#39;</span><span class="p">:</span>  <span class="n">rand_undersample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                     <span class="s1">&#39;smote_oversample&#39;</span><span class="p">:</span>    <span class="n">smote_oversample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">                     <span class="s1">&#39;cluster_undersample&#39;</span><span class="p">:</span> <span class="n">cluster_undersample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># A look at the class balance following resampling</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sampled_data_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">  <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;Class Balance with </span><span class="si">{:&lt;25}</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">show_imb</span><span class="p">(</span><span class="n">sampled_data_dict</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;y_train&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">print</span><span class="p">(</span><span class="n">txt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+</span></span></code></pre></div><pre><code>Class Balance with no_sample:               7767 Negative Samples | 547 Positive Samples
+Class Balance with random_oversample:       7767 Negative Samples | 7767 Positive Samples
+Class Balance with random_undersample:      547 Negative Samples | 547 Positive Samples
+Class Balance with smote_oversample:        7767 Negative Samples | 7767 Positive Samples
+Class Balance with cluster_undersample:     547 Negative Samples | 547 Positive Samples
+</code></pre>
+<p>As you can see, all the resampled training sets are now balanced except for the basline with no resampling. Let&rsquo;s train some baseline classifiers with each resampling method and view the results on the unaltered test set.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Baseline Models</span>
+</span></span><span class="line"><span class="cl"><span class="n">models_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Naive Bayes&#39;</span><span class="p">:</span>         <span class="n">GaussianNB</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">               <span class="s1">&#39;Random Forest&#39;</span><span class="p">:</span>       <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">               <span class="s1">&#39;Logistic Regression&#39;</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Dataframe to view test results</span>
+</span></span><span class="line"><span class="cl"><span class="n">results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">,</span> <span class="s1">&#39;sampling_type&#39;</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="s1">&#39;fbeta&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Iterate over all models and all resampling techniques</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">models_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">sampled_data_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Fit model on resampled data</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sampled_data_dict</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">sampled_data_dict</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s1">&#39;y_train&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Predict on holdout test set</span>
+</span></span><span class="line"><span class="cl">    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Add test results to dataframe</span>
+</span></span><span class="line"><span class="cl">    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">fbeta_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">2</span><span class="p">),</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">preds</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">results_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span>
+</span></span><span class="line"><span class="cl">    <span class="n">results_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="n">results_df</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">results_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span> <span class="o">=</span> <span class="s1">&#39;recall&#39;</span><span class="p">,</span> <span class="n">ascending</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</span></span></code></pre></div><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>model_name</th>
+      <th>sampling_type</th>
+      <th>model</th>
+      <th>fbeta</th>
+      <th>recall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5</th>
+      <td>Random Forest</td>
+      <td>cluster_undersample</td>
+      <td>(DecisionTreeClassifier(max_depth=10, max_feat...</td>
+      <td>0.442708</td>
+      <td>0.980769</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Logistic Regression</td>
+      <td>cluster_undersample</td>
+      <td>LogisticRegression(random_state=0)</td>
+      <td>0.634518</td>
+      <td>0.961538</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Logistic Regression</td>
+      <td>random_undersample</td>
+      <td>LogisticRegression(random_state=0)</td>
+      <td>0.664820</td>
+      <td>0.923077</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Random Forest</td>
+      <td>random_undersample</td>
+      <td>(DecisionTreeClassifier(max_depth=10, max_feat...</td>
+      <td>0.574413</td>
+      <td>0.846154</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Logistic Regression</td>
+      <td>random_oversample</td>
+      <td>LogisticRegression(random_state=0)</td>
+      <td>0.684713</td>
+      <td>0.826923</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Random Forest</td>
+      <td>random_oversample</td>
+      <td>(DecisionTreeClassifier(max_depth=10, max_feat...</td>
+      <td>0.598291</td>
+      <td>0.807692</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Logistic Regression</td>
+      <td>smote_oversample</td>
+      <td>LogisticRegression(random_state=0)</td>
+      <td>0.665584</td>
+      <td>0.788462</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Naive Bayes</td>
+      <td>cluster_undersample</td>
+      <td>GaussianNB()</td>
+      <td>0.288462</td>
+      <td>0.750000</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Naive Bayes</td>
+      <td>smote_oversample</td>
+      <td>GaussianNB()</td>
+      <td>0.286344</td>
+      <td>0.750000</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Naive Bayes</td>
+      <td>random_oversample</td>
+      <td>GaussianNB()</td>
+      <td>0.283843</td>
+      <td>0.750000</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Naive Bayes</td>
+      <td>no_sample</td>
+      <td>GaussianNB()</td>
+      <td>0.283843</td>
+      <td>0.750000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Random Forest</td>
+      <td>smote_oversample</td>
+      <td>(DecisionTreeClassifier(max_depth=10, max_feat...</td>
+      <td>0.523649</td>
+      <td>0.596154</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Naive Bayes</td>
+      <td>random_undersample</td>
+      <td>GaussianNB()</td>
+      <td>0.341463</td>
+      <td>0.538462</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Logistic Regression</td>
+      <td>no_sample</td>
+      <td>LogisticRegression(random_state=0)</td>
+      <td>0.115207</td>
+      <td>0.096154</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Random Forest</td>
+      <td>no_sample</td>
+      <td>(DecisionTreeClassifier(max_depth=10, max_feat...</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>In terms of recall the random forest / cluster undersampling combo is the best, but it is quite weak in terms of F2 score, which means it will likely give us a lot of false positives in its predictions. The logistic regression / cluster undersample performs similarly in terms of recall, but maintains a much better F2 score, so we&rsquo;ll move forward with that model! Let&rsquo;s have a better look at its performance out of the box using a confusion matrix.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show_confusion</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="n">cf</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;True Negatives&#34;</span><span class="p">,</span><span class="s2">&#34;False Positives&#34;</span><span class="p">,</span><span class="s2">&#34;False Negatives&#34;</span><span class="p">,</span><span class="s2">&#34;True Positives&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group_perc</span> <span class="o">=</span> <span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">,</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">3</span><span class="p">])]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group_perc_str</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;</span><span class="si">{:.0%}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">each</span><span class="p">)</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">group_perc</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group_counts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;</span><span class="si">{0:0.0f}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">cf</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&#34;</span><span class="si">{</span><span class="n">v1</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">v2</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">v3</span><span class="si">}</span><span class="s2"> of class total&#34;</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">group_counts</span><span class="p">,</span> <span class="n">group_names</span><span class="p">,</span> <span class="n">group_perc_str</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group_perc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">group_perc</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">print</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">group_perc</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">best_baseline_model</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">results_df</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Logistic Regression&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">results_df</span><span class="p">[</span><span class="s1">&#39;sampling_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;cluster_undersample&#39;</span><span class="p">)][</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">show_confusion</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">best_baseline_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</span></span></code></pre></div><p><img loading="lazy" src="/base_cf.png" alt="png"  />
+</p>
+<p>We&rsquo;re already in a really good spot as we are correctly identifying the positive class over 96% of the time. We have more false positives than I&rsquo;d like, but maybe some hyperparameter tuning can help here.</p>
+<h2 id="step-3-finding-best-hyperparams-with-gridsearchcv">Step 3: Finding Best Hyperparams with GridsearchCV<a hidden class="anchor" aria-hidden="true" href="#step-3-finding-best-hyperparams-with-gridsearchcv">#</a></h2>
+<p>For finding the best logistic regression hyperparams, we will use Scikit-Learn&rsquo;s GridSearchCV in combination with an Imblearn Pipeline. GridsearchCV performs an exhaustive search over the provided parameters and performs cross-validation for every parameter combination. Imblearn&rsquo;s Pipeline allows us to perform the same resampling technique we chose in step two with GridsearchCV. The pipeline will resample the training data using cluster undersampling but will not touch the balance of the test data in the fold. We&rsquo;ll set up GridsearchCV to optimize for recall score and have it return the model that performed the best in terms of average recall across all folds.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">imblearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Perform resampling on train split</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s1">&#39;sampling&#39;</span><span class="p">,</span> <span class="n">ClusterCentroids</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">MiniBatchKMeans</span><span class="p">(</span><span class="n">n_init</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;classification__solver&#39;</span><span class="p">:(</span><span class="s1">&#39;liblinear&#39;</span><span class="p">,</span> <span class="s1">&#39;lbfgs&#39;</span><span class="p">),</span> <span class="s1">&#39;classification__C&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Returns best model in terms of recall score</span>
+</span></span><span class="line"><span class="cl"><span class="n">best_grid_model</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">param_grid</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">cv</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">refit</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">scoring</span> <span class="o">=</span> <span class="s1">&#39;recall&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">best_grid_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># A look at how well all hyperparameter combinations perform</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">best_grid_model</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span> <span class="o">=</span> <span class="s1">&#39;rank_test_score&#39;</span><span class="p">)</span>
+</span></span></code></pre></div><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean_fit_time</th>
+      <th>std_fit_time</th>
+      <th>mean_score_time</th>
+      <th>std_score_time</th>
+      <th>param_classification__C</th>
+      <th>param_classification__solver</th>
+      <th>params</th>
+      <th>split0_test_score</th>
+      <th>split1_test_score</th>
+      <th>split2_test_score</th>
+      <th>split3_test_score</th>
+      <th>split4_test_score</th>
+      <th>mean_test_score</th>
+      <th>std_test_score</th>
+      <th>rank_test_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>29.715823</td>
+      <td>3.306074</td>
+      <td>0.068921</td>
+      <td>0.016334</td>
+      <td>5</td>
+      <td>liblinear</td>
+      <td>{'classification__C': 5, 'classification__solv...</td>
+      <td>0.908257</td>
+      <td>0.935780</td>
+      <td>0.936364</td>
+      <td>0.909091</td>
+      <td>0.889908</td>
+      <td>0.915880</td>
+      <td>0.017857</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>29.644415</td>
+      <td>3.598677</td>
+      <td>0.095378</td>
+      <td>0.026857</td>
+      <td>5</td>
+      <td>lbfgs</td>
+      <td>{'classification__C': 5, 'classification__solv...</td>
+      <td>0.908257</td>
+      <td>0.935780</td>
+      <td>0.936364</td>
+      <td>0.909091</td>
+      <td>0.889908</td>
+      <td>0.915880</td>
+      <td>0.017857</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>29.187842</td>
+      <td>2.767306</td>
+      <td>0.057547</td>
+      <td>0.019141</td>
+      <td>1</td>
+      <td>liblinear</td>
+      <td>{'classification__C': 1, 'classification__solv...</td>
+      <td>0.899083</td>
+      <td>0.935780</td>
+      <td>0.927273</td>
+      <td>0.900000</td>
+      <td>0.889908</td>
+      <td>0.910409</td>
+      <td>0.017804</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>28.689645</td>
+      <td>3.572646</td>
+      <td>0.104958</td>
+      <td>0.027626</td>
+      <td>1</td>
+      <td>lbfgs</td>
+      <td>{'classification__C': 1, 'classification__solv...</td>
+      <td>0.899083</td>
+      <td>0.935780</td>
+      <td>0.927273</td>
+      <td>0.900000</td>
+      <td>0.889908</td>
+      <td>0.910409</td>
+      <td>0.017804</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28.605801</td>
+      <td>2.047266</td>
+      <td>0.052858</td>
+      <td>0.005150</td>
+      <td>10</td>
+      <td>liblinear</td>
+      <td>{'classification__C': 10, 'classification__sol...</td>
+      <td>0.908257</td>
+      <td>0.926606</td>
+      <td>0.918182</td>
+      <td>0.890909</td>
+      <td>0.889908</td>
+      <td>0.906772</td>
+      <td>0.014572</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>32.235926</td>
+      <td>3.819624</td>
+      <td>0.099514</td>
+      <td>0.020922</td>
+      <td>10</td>
+      <td>lbfgs</td>
+      <td>{'classification__C': 10, 'classification__sol...</td>
+      <td>0.908257</td>
+      <td>0.926606</td>
+      <td>0.918182</td>
+      <td>0.890909</td>
+      <td>0.889908</td>
+      <td>0.906772</td>
+      <td>0.014572</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+<p>A look at the confusion matrix following hyperparameter tuning.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">show_confusion</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">best_grid_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</span></span></code></pre></div><p><img loading="lazy" src="/hyperparam_cf.png" alt="png"  />
+</p>
+<p>This is a bit better. Our false positive rate has reduced slightly, meaning that this new model is having an easier time differentiating between the two classes than before. In many cases this would suffice, but what if we attempted to let no positive samples slip past our classifier? This is where the fourth step can come in, altering the decision threshold of the model.</p>
+<h2 id="step-4-altering-the-decision-threshold">Step 4: Altering the Decision Threshold<a hidden class="anchor" aria-hidden="true" href="#step-4-altering-the-decision-threshold">#</a></h2>
+<p>Altering the decision threshold will allow us to catch more true positive samples by increasing the <em>sensitivity</em> of the model. This increase in sensitivity will come at a cost, however, causing a decrease in the precision of our model. But, that&rsquo;s ok! We are most concerned with catching the true positives in this data and aren&rsquo;t nearly as worried about false positives. Below is a look at our model&rsquo;s precision-recall curve to get a better understanding of the tradeoff between the two measures prior to changing the decision threshold.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_recall_curve</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Get class probability scores</span>
+</span></span><span class="line"><span class="cl"><span class="n">y_scores</span> <span class="o">=</span> <span class="n">best_grid_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Returns precision-recall pairs for different probability thresholds</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">viz_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Precision&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">:</span><span class="n">r</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">viz_df</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s2">&#34;Recall&#34;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&#34;Precision&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p><img loading="lazy" src="/pr_curve.png" alt="png"  />
+</p>
+<p>For us to achieve perfect recall, the model&rsquo;s precision is going to suffer quite a bit. Again, that&rsquo;s OK because of this project&rsquo;s main goal to effectively catch positive samples. Let&rsquo;s iteratively lower the decision threshold until we achieve perfect recall.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">adjusted_classes</span><span class="p">(</span><span class="n">y_scores</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># If pred probability is greater than or equal to threshold it is positive</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">t</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_scores</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Default sklearn logistic regression threshold</span>
+</span></span><span class="line"><span class="cl"><span class="n">init_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
+</span></span><span class="line"><span class="cl"><span class="n">pred</span> <span class="o">=</span> <span class="n">adjusted_classes</span><span class="p">(</span><span class="n">y_scores</span><span class="p">,</span> <span class="n">init_threshold</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Stops when recall is perfect</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="n">recall</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">init_threshold</span> <span class="o">=</span> <span class="n">init_threshold</span> <span class="o">-</span> <span class="mf">0.001</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pred</span> <span class="o">=</span> <span class="n">adjusted_classes</span><span class="p">(</span><span class="n">y_scores</span><span class="p">,</span> <span class="n">init_threshold</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Maximum Threshold for Perfect Recall:&#34;</span><span class="p">,</span> <span class="n">init_threshold</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">show_confusion</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+</span></span></code></pre></div><pre><code>Maximum Threshold for Perfect Recall:  0.3679999999999999
+</code></pre>
+<p><img loading="lazy" src="/perfect_recall_cf.png" alt="png"  />
+</p>
+<p>There you have it - a very sensitive model that doesn&rsquo;t always spit out the positive class!</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://chandleru11.github.io/posts/tableau_viz/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Running Data Dashboard</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2025 <a href="https://chandleru11.github.io/">Chandler Underwood</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
