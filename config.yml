@@ -77,8 +77,7 @@ params:
   profileMode:
     enabled: True
     title: Chandler's Portfolio
-    subtitle: Hello! This portfolio showcases some of my work in data science using data analysis, machine learning, and visualization. Please reach out if you'd like to connect!
-    imageUrl: "IMG_0255.JPG"
+    subtitle: Hello! This portfolio showcases some of my work in data science using data analysis, machine learning, and visualization.
     imageTitle: image
     imageWidth: 365
     imageHeight: 300
