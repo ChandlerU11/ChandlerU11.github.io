@@ -38,9 +38,9 @@ languages:
         - name: Projects
           url: projects
           weight: 3
-        #- name: Publications
-        #  url: publications
-        #  weight: 4
+        - name: Publications
+          url: publications
+          weight: 4
 
 outputs:
   home:
