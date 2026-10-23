@@ -24,7 +24,7 @@ author: Chandler Underwood
 ---
 # Experience
 
-## Blue Cross of Idaho
+## Arcadia
 *Data Engineer* | March 2025 - Present
 - Built and delivered custom data connectors end to end, supporting healthcare data integration between client systems and Arcadia’s analytics platform
 - Applied SQL, Spark/Scala, cloud services, NoSQL databases, and ETL/orchestration tools to implement and support healthcare data integration workflows
