@@ -1,3 +1,20 @@
+# Generating Realistic Adversarial User Comment Attacks to Evaluate the Robustness of Fake News Detectors
+**Abstract:** The rise of social media has amplified the spread of fake news, threatening societal stability. To address this, machine learning-based fake news detection systems analyze news content, including text, images, and user interactions. However, these systems are vulnerable to attacks that manipulate data, undermining their effectiveness...we focus on generating more realistic comments for specific news articles. We propose three novel attack strategies: two fine-tune a small language model using reinforcement learning algorithms transformer reinforcement learning and reinforced self-training, while the third uses a large language model with self-reflection. We conduct experiments showing that our methods outperform the state-of-the-art MALCOM procedure and that our proposed attack strategies produce more realistic comments, which are consequently more difficult to detect.
+
+{{< rawhtml >}}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<a href="https://ieeexplore.ieee.org/abstract/document/11381995"> Link to Paper </a> 
+</body>
+</html>
+
+{{< /rawhtml >}}
+
 # Evaluating the robustness of fake news detectors to adversarial attacks with real user comments
 **Abstract:** The widespread use of social media has led to an increase in false and misleading information presented as legitimate news, also
 known as fake news. This poses a significant threat to societal stability and has led to the development of fake news detectors
