@@ -25,7 +25,14 @@ author: Chandler Underwood
 # Experience
 
 ## Blue Cross of Idaho
-*Healthcare Data Analyst* | June 2024 - Present
+*Data Engineer* | March 2025 - Present
+- Built and delivered custom data connectors end to end, supporting healthcare data integration between client systems and Arcadia’s analytics platform
+- Applied SQL, Spark/Scala, cloud services, NoSQL databases, and ETL/orchestration tools to implement and support healthcare data integration workflows
+- Maintained and troubleshot existing pipelines, resolving implementation issues and making ongoing improvements to data processing reliability and maintainability
+
+
+## Blue Cross of Idaho
+*Healthcare Data Analyst* | June 2024 - February 2025
 - Developed and optimized healthcare analytics reports to streamline reporting processes, saving hours of manual reporting time each week using Python, Pandas, and SQL
 - Implemented and maintained hundreds of SQL queries to extract, manipulate, and analyze large datasets from relational databases to gain insights
 - Collaborated with cross-functional teams to identify key performance indicators, creating custom data solutions to improve decision-making
